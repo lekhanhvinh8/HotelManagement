@@ -16,8 +16,10 @@ namespace HotelManagement.Models.Dtos
             this.id = room.id;
             this.room_number = room.room_number;
             this.note = room.note;
+            this.room_category_id = room.room_category_id;
         }
         public int id { get; set; }
+
         [StringLength(10)]
         public string room_number { get; set; }
         public string note { get; set; }
