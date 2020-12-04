@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="HotelManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Bill">
+    <Key>
+      <PropertyRef Name="room_rental_slip_id" />
+      <PropertyRef Name="guest_id" />
+      <PropertyRef Name="date_of_invoice" />
+    </Key>
+    <Property Name="room_rental_slip_id" Type="Int32" Nullable="false" />
+    <Property Name="guest_id" Type="Int32" Nullable="false" />
+    <Property Name="date_of_invoice" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="total_cost" Type="Single" />
+    <NavigationProperty Name="Guest" Relationship="Self.FK__Bill__guest_id__34C8D9D1" FromRole="Bill" ToRole="Guests" />
+    <NavigationProperty Name="Room_rental_slip" Relationship="Self.FK__Bill__room_renta__33D4B598" FromRole="Bill" ToRole="Room_rental_slip" />
+  </EntityType>
+  <EntityType Name="Guest_categories">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="coefficient" Type="Single" />
+    <NavigationProperty Name="Guests" Relationship="Self.guestsFKCategoryID" FromRole="Guest_categories" ToRole="Guests" />
+  </EntityType>
+  <EntityType Name="Guest">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="cmnd" Type="Int32" Nullable="false" />
+    <Property Name="name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="guest_category_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Bills" Relationship="Self.FK__Bill__guest_id__34C8D9D1" FromRole="Guests" ToRole="Bill" />
+    <NavigationProperty Name="Guest_categories" Relationship="Self.guestsFKCategoryID" FromRole="Guests" ToRole="Guest_categories" />
+    <NavigationProperty Name="Room_rental_slip" Relationship="Self.In_room" FromRole="Guests" ToRole="Room_rental_slip" />
+  </EntityType>
+  <EntityType Name="Room_categories">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="unit_price" Type="Single" />
+    <Property Name="max_number_of_guests" Type="Int32" />
+    <Property Name="num_start_surcharge" Type="Int32" />
+    <Property Name="surcharge_rate" Type="Single" />
+    <NavigationProperty Name="Rooms" Relationship="Self.roomsFKCategoryID" FromRole="Room_categories" ToRole="Rooms" />
+  </EntityType>
+  <EntityType Name="Room_rental_slip">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="room_id" Type="Int32" Nullable="false" />
+    <Property Name="start_date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="end_date" Type="DateTime" Nullable="false" Precision="0" />
+    <NavigationProperty Name="Bills" Relationship="Self.FK__Bill__room_renta__33D4B598" FromRole="Room_rental_slip" ToRole="Bill" />
+    <NavigationProperty Name="Room" Relationship="Self.FK__Room_rent__room___30F848ED" FromRole="Room_rental_slip" ToRole="Rooms" />
+    <NavigationProperty Name="Guests" Relationship="Self.In_room" FromRole="Room_rental_slip" ToRole="Guests" />
+  </EntityType>
+  <EntityType Name="Room">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="room_number" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="room_category_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Room_categories" Relationship="Self.roomsFKCategoryID" FromRole="Rooms" ToRole="Room_categories" />
+    <NavigationProperty Name="Room_rental_slip" Relationship="Self.FK__Room_rent__room___30F848ED" FromRole="Rooms" ToRole="Room_rental_slip" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK__Bill__guest_id__34C8D9D1">
+    <End Role="Guests" Type="Self.Guest" Multiplicity="1" />
+    <End Role="Bill" Type="Self.Bill" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Guests">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Bill">
+        <PropertyRef Name="guest_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Bill__room_renta__33D4B598">
+    <End Role="Room_rental_slip" Type="Self.Room_rental_slip" Multiplicity="1" />
+    <End Role="Bill" Type="Self.Bill" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Room_rental_slip">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Bill">
+        <PropertyRef Name="room_rental_slip_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="guestsFKCategoryID">
+    <End Role="Guest_categories" Type="Self.Guest_categories" Multiplicity="1" />
+    <End Role="Guests" Type="Self.Guest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Guest_categories">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Guests">
+        <PropertyRef Name="guest_category_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="roomsFKCategoryID">
+    <End Role="Room_categories" Type="Self.Room_categories" Multiplicity="1" />
+    <End Role="Rooms" Type="Self.Room" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Room_categories">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Rooms">
+        <PropertyRef Name="room_category_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Room_rent__room___30F848ED">
+    <End Role="Rooms" Type="Self.Room" Multiplicity="1" />
+    <End Role="Room_rental_slip" Type="Self.Room_rental_slip" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Rooms">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Room_rental_slip">
+        <PropertyRef Name="room_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="In_room">
+    <End Role="Guests" Type="Self.Guest" Multiplicity="*" />
+    <End Role="Room_rental_slip" Type="Self.Room_rental_slip" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="HotelManagementDbContext" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Bills" EntityType="Self.Bill" />
+    <EntitySet Name="Guest_categories" EntityType="Self.Guest_categories" />
+    <EntitySet Name="Guests" EntityType="Self.Guest" />
+    <EntitySet Name="Room_categories" EntityType="Self.Room_categories" />
+    <EntitySet Name="Room_rental_slip" EntityType="Self.Room_rental_slip" />
+    <EntitySet Name="Rooms" EntityType="Self.Room" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <AssociationSet Name="FK__Bill__guest_id__34C8D9D1" Association="Self.FK__Bill__guest_id__34C8D9D1">
+      <End Role="Guests" EntitySet="Guests" />
+      <End Role="Bill" EntitySet="Bills" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Bill__room_renta__33D4B598" Association="Self.FK__Bill__room_renta__33D4B598">
+      <End Role="Room_rental_slip" EntitySet="Room_rental_slip" />
+      <End Role="Bill" EntitySet="Bills" />
+    </AssociationSet>
+    <AssociationSet Name="guestsFKCategoryID" Association="Self.guestsFKCategoryID">
+      <End Role="Guest_categories" EntitySet="Guest_categories" />
+      <End Role="Guests" EntitySet="Guests" />
+    </AssociationSet>
+    <AssociationSet Name="roomsFKCategoryID" Association="Self.roomsFKCategoryID">
+      <End Role="Room_categories" EntitySet="Room_categories" />
+      <End Role="Rooms" EntitySet="Rooms" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Room_rent__room___30F848ED" Association="Self.FK__Room_rent__room___30F848ED">
+      <End Role="Rooms" EntitySet="Rooms" />
+      <End Role="Room_rental_slip" EntitySet="Room_rental_slip" />
+    </AssociationSet>
+    <AssociationSet Name="In_room" Association="Self.In_room">
+      <End Role="Guests" EntitySet="Guests" />
+      <End Role="Room_rental_slip" EntitySet="Room_rental_slip" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,466 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/DataTables/css/dataTables.bootstrap.css" />
+    <link href="https://cdn.jsdelivr.net/npm/jquery-smarttab@3/dist/css/smart_tab_all.min.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div>
+        <div>
+            <button id="test1">Test</button>
+            <button id="test2">Test</button>
+        </div>
+        <div id="smart-tab">
+            <ul class="nav">
+                <li>
+                    <a class="nav-link" href="#tab-room-categories-management">
+                        Room Categories
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="#tab-room-management">
+                        Rooms
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="#tab-ProductSpecificationManagement">
+                        Guest Categories
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="tab-room-categories-management" class="tab-pane" role="tabpanel">
+                    <div>
+                        <button id="add-new-room-category" class="btn btn-primary">Add new room category</button>
+                    </div>
+                    <div>
+                        <table id="table-room-categories" class="table table-bordered table-hover">
+                            <thead>
+
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="dialog-room-category" style="display: none;">
+                        <form id="form-room-category" role="form">
+                            <div class="form-group">
+                                <label for="id">Id</label>
+                                <input id="room-category-ID" class="form-control" type="number" disabled="disabled" name="id" />
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input id="room-category-name" class="form-control" type="text" name="name" />
+                            </div>
+                            <div class="form-group">
+                                <label for="unit_price">Unit Price</label>
+                                <input id="room-category-unit-price" class="form-control" type="number" name="unit_price" />
+                            </div>
+                            <div class="form-group">
+                                <label for="max_number_of_guests">Max Number Of Guest</label>
+                                <input id="room-category-max-guests" class="form-control" type="number" name="max_number_of_guests" />
+                            </div>
+                            <div class="form-group">
+                                <label for="num_start_surcharge">Number to start surcharge</label>
+                                <input id="room-category-num-surcharge" class="form-control" type="number" name="num_start_surcharge" />
+                            </div>
+                            <div class="form-group">
+                                <label for="surcharge_rate">Surcharge Rate</label>
+                                <input id="room-category-surcharge-rate" class="form-control" type="number" name="surcharge_rate" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div id="tab-room-management" class="tab-pane" role="tabpanel">
+                    <div>
+                        <button id="add-new-room" class="btn btn-primary">Add new room</button>
+                    </div>
+                    <div>
+                        <table id="table-rooms" class="table table-bordered table-hover">
+                            <thead>
+
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="dialog-rooms" style="display: none;">
+                        <form id="form-rooms" role="form">
+                            <div class="form-group">
+                                <label for="id">Id</label>
+                                <input id="room-id" class="form-control" type="number" disabled="disabled" name="id" />
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input id="room-number" class="form-control" type="text" name="name" />
+                            </div>
+                            <div class="form-group">
+                                <label for="unit_price">Unit Price</label>
+                                <input id="room-category-unit-price" class="form-control" type="number" name="unit_price" />
+                            </div>
+                            <div class="form-group">
+                                <label for="max_number_of_guests">Max Number Of Guest</label>
+                                <input id="room-category-max-guests" class="form-control" type="number" name="max_number_of_guests" />
+                            </div>
+                            <div class="form-group">
+                                <label for="num_start_surcharge">Number to start surcharge</label>
+                                <input id="room-category-num-surcharge" class="form-control" type="number" name="num_start_surcharge" />
+                            </div>
+                            <div class="form-group">
+                                <label for="surcharge_rate">Surcharge Rate</label>
+                                <input id="room-category-surcharge-rate" class="form-control" type="number" name="surcharge_rate" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/bootbox.js"></script>
+    <script src="~/Scripts/DataTables/jquery.dataTables.js"></script>
+    <script src="~/Scripts/DataTables/dataTables.bootstrap.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-smarttab@3/dist/js/jquery.smartTab.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/DataTables/dataTables.scroller.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var dataTable;
+            dataTable = $("#table-room-categories").DataTable({
+                ajax: {
+                    url: "/api/RoomCategories",
+                    dataSrc: "",
+                },
+                columns: [
+                    {
+                        title: "ID",
+                        data: "id",
+                        render: function (data) {
+                            return data;
+                        },
+                    },
+                    {
+                        title: "Name",
+                        data: "name",
+                        render: function (data, type, roomCategory) {
+                            return "<button class='btn btn-link js-modify' data=" + roomCategory.id + ">" + data + "</button>";
+                        },
+                    },
+                    {
+                        title: "Unit Price",
+                        data: "unit_price",
+                        render: function (data) {
+                            return data;
+                        },
+                    },
+                    {
+                        title: "Maximum Guest",
+                        data: "max_number_of_guests",
+                        render: function (data) {
+                            return data;
+                        },
+                    },
+                    {
+                        title: "Number start surcharge",
+                        data: "num_start_surcharge",
+                        render: function (data) {
+                            return data;
+                        },
+                    },
+                    {
+                        title: "Surcharge Rate",
+                        data: "surcharge_rate",
+                        render: function (data) {
+                            return data;
+                        },
+                    },
+                    {
+                        title: "Delete",
+                        data: "id",
+                        render: function (data) {
+                            return "<button class='btn js-delete' data=" + data + ">Delete</button>";
+                        },
+                    },
+                ],
+                scrollY: 280,
+                scroller: true,
+                deferRender: true,
+            });
+            
+            var smartTab = $("#smart-tab").smartTab();
+            smartTab.smartTab("goToTab", 0);
+
+            smartTab.on("leaveTab", function (e, anchorObject, tabIndex) {
+                if (tabIndex === 0)
+                    dataTable.destroy();
+            });
+
+            smartTab.on("tabContent", function (e, anchorObject, tabIndex) {
+                if (tabIndex === 0) {
+                    dataTable = $("#table-room-categories").DataTable({
+                        ajax: {
+                            url: "/api/RoomCategories",
+                            dataSrc: "",
+                        },
+                        columns: [
+                            {
+                                title: "ID",
+                                data: "id",
+                                render: function (data) {
+                                    return data;
+                                },
+                            },
+                            {
+                                title: "Name",
+                                data: "name",
+                                render: function (data, type, roomCategory) {
+                                    return "<button class='btn btn-link js-modify' data=" + roomCategory.id + ">" + data + "</button>";
+                                },
+                            },
+                            {
+                                title: "Unit Price",
+                                data: "unit_price",
+                                render: function (data) {
+                                    return data;
+                                },
+                            },
+                            {
+                                title: "Maximum Guest",
+                                data: "max_number_of_guests",
+                                render: function (data) {
+                                    return data;
+                                },
+                            },
+                            {
+                                title: "Number start surcharge",
+                                data: "num_start_surcharge",
+                                render: function (data) {
+                                    return data;
+                                },
+                            },
+                            {
+                                title: "Surcharge Rate",
+                                data: "surcharge_rate",
+                                render: function (data) {
+                                    return data;
+                                },
+                            },
+                            {
+                                title: "Delete",
+                                data: "id",
+                                render: function (data) {
+                                    return "<button class='btn js-delete' data=" + data + ">Delete</button>";
+                                },
+                            },
+                        ],
+                        scrollY: 280,
+                        scroller: true,
+                        deferRender: true,
+                    });
+                }
+            });
+
+            //Room Category Management
+            $("#add-new-room-category").on("click", function () {
+
+                $("#room-category-ID").attr("value", "");
+                $("#room-category-name").attr("value", "");
+                $("#room-category-unit-price").attr("value", "");
+                $("#room-category-max-guests").attr("value", "");
+                $("#room-category-num-surcharge").attr("value", "");
+                $("#room-category-surcharge-rate").attr("value", "");
+
+                CreateRoomCategoryBootBoxDialog("Add new room category", dataTable, "add");
+            });
+            dataTable.on("click", ".js-modify", function () {
+                $.ajax({
+                    url: "/api/RoomCategories/" + $(this).attr("data"),
+                    method: "Get",
+                    success: function (response) {
+                        $("#room-category-ID").attr("value", response.id);
+                        $("#room-category-name").attr("value", response.name);
+                        $("#room-category-unit-price").attr("value", response.unit_price);
+                        $("#room-category-max-guests").attr("value", response.max_number_of_guests);
+                        $("#room-category-num-surcharge").attr("value", response.num_start_surcharge);
+                        $("#room-category-surcharge-rate").attr("value", response.surcharge_rate);
+
+                        CreateRoomCategoryBootBoxDialog("Modify" + response.id, dataTable, "modify");
+                    },
+                });
+            });
+            dataTable.on("click", ".js-delete", function () {
+                button = $(this);
+                bootbox.confirm("Are you sure you want to delete room category " + button.attr("data"), function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/api/RoomCategories/" + button.attr("data"),
+                            method: "Delete",
+                            success: function () {
+                                button.parents("tr").remove();
+                            },
+                        });
+                    }
+                });
+            });
+
+            $("#test1").on("click", function () {
+                $("#room-category-name").attr("value", "abc");
+
+                bootbox.dialog({
+                    message: $("#dialog-room-category").html(),
+                });
+            });
+            $("#test2").on("click", function () {
+                $("#room-category-name").attr("value", "123");
+
+                bootbox.dialog({
+                    message: $("#dialog-room-category").html(),
+                });
+            });
+
+            jQuery.fn.serializeJSON = function () {
+                var json = {};
+
+                jQuery.map(jQuery(this).serializeArray(), function (n) {
+                    var _ = n.name.indexOf('[');
+
+                    if (_ > -1) {
+                        var o = json,
+                            _name;
+
+                        _name = n.name.replace(/\]/gi, '').split('[');
+
+                        for (var i = 0, len = _name.length; i < len; i++) {
+                            if (i == len - 1) {
+                                if (o[_name[i]]) {
+                                    if (typeof o[_name[i]] == 'string') {
+                                        o[_name[i]] = [o[_name[i]]];
+                                    }
+
+                                    o[_name[i]].push(n.value);
+                                } else {
+                                    o[_name[i]] = n.value || '';
+                                }
+                            } else {
+                                o = o[_name[i]] = o[_name[i]] || {};
+                            }
+                        }
+                    } else if (json[n.name] !== undefined) {
+                        if (!json[n.name].push) {
+                            json[n.name] = [json[n.name]];
+                        }
+
+                        json[n.name].push(n.value || '');
+                    } else {
+                        json[n.name] = n.value || '';
+                    }
+                });
+
+                return json;
+            };
+
+            function CreateRoomCategoryBootBoxDialog(title, table, mode) {
+                dialogBootbox = bootbox.dialog({
+                    message: $("#dialog-room-category").html(),
+                    title: title,
+                    buttons: [
+                        {
+                            label: "Save",
+                            className: "btn btn-primary",
+                            callback: function () {
+                                var form = dialogBootbox.find("#form-room-category");
+                                var items = form.serializeJSON();
+
+                                if (items.name == "" || items.unit_price == "" || items.max_number_of_guests == "" || items.num_start_surcharge == "" || items.surcharge_rate == "") {
+                                    alert("Please fill out all information");
+                                    return false;
+                                }
+                                if (mode == "add") {
+                                    $.ajax({
+                                        url: "/api/RoomCategories",
+                                        method: "Post",
+                                        data: {
+                                            name: items.name,
+                                            unit_price: items.unit_price,
+                                            max_number_of_guests: items.max_number_of_guests,
+                                            num_start_surcharge: items.num_start_surcharge,
+                                            surcharge_rate: items.surcharge_rate,
+                                        },
+                                        success: function (response) {
+                                            var trDOM = table.row.add({
+                                                id: response.id,
+                                                name: response.name,
+                                                unit_price: response.unit_price,
+                                                max_number_of_guests: response.max_number_of_guests,
+                                                num_start_surcharge: response.num_start_surcharge,
+                                                surcharge_rate: response.surcharge_rate,
+                                            }).draw(false).node();
+                                        },
+                                    });
+                                }
+
+                                if(mode == "modify")
+                                {
+                                    $.ajax({
+                                        url: "/api/RoomCategories",
+                                        method: "Put",
+                                        data: {
+                                            id: $("#room-category-ID").attr("value"),
+                                            name: items.name,
+                                            unit_price: items.unit_price,
+                                            max_number_of_guests: items.max_number_of_guests,
+                                            num_start_surcharge: items.num_start_surcharge,
+                                            surcharge_rate: items.surcharge_rate,
+                                        },
+                                        success: function (response) {
+                                            var indexes = table.rows().eq(0).filter(function (rowIdx) {
+                                                return table.cell(rowIdx, 0).data() === response.id;
+                                            });
+
+                                            var newData = table.row(indexes[0]).data();
+                                            newData.name = items.name;
+                                            newData.unit_price = items.unit_price;
+                                            newData.max_number_of_guests = items.max_number_of_guests;
+                                            newData.num_start_surcharge = items.num_start_surcharge;
+                                            newData.surcharge_rate = items.surcharge_rate;
+
+                                            table.row(indexes[0]).data(newData).draw();
+                                        },
+                                    });
+                                }
+                                
+                            },
+                        },
+                        {
+                            label: "Cancel",
+                            className: "btn btn-primary",
+                            callback: function () {
+
+                            },
+                        }
+                    ],
+                });
+                    
+                
+                
+            }
+        });
+
+    </script>
+</body>
+</html>
