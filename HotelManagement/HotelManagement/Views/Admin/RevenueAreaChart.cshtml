@@ -1,0 +1,30 @@
+﻿
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" charset="utf-8" />
+	<title>Biểu đồ</title>
+	<link href="~/Content/sb-admin-2.min.css" rel="stylesheet">
+</head>
+<body>
+	<!-- Area Chart -->
+	<div class="card shadow mb-4" style="width: 940px">
+		<div class="card-header py-3">
+			<h6 class="m-0 font-weight-bold text-primary">Doanh thu</h6>
+		</div>
+		<div class="card-body">
+			<div class="chart-area" style="position: relative; width:100%">
+				<canvas id="myAreaChart" style="height: 400px; width: 1500px;"></canvas>
+			</div>
+			<hr>
+		</div>
+	</div>
+	<script src="~/Scripts/Chart.min.js"></script>
+	<script src="~/Scripts/chart-area-demo.js"></script>
+</body>
+</html>
