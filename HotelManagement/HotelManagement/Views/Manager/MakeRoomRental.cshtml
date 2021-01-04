@@ -1,0 +1,76 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>MakeRoomRentel</title>
+
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css"/>
+</head>
+<body>
+    <div class="container">
+        <div>
+            <div>
+                <label for="searchRoomName">Search by room number</label>
+                <input id="search-by-roomNumber" type="text" class="form-control" style="width: 30%;"/>
+            </div>
+        </div>
+        <div>
+            <div>
+                <select id="select-room-category" class="form-control" style="width: 30%;">
+                </select>
+            </div>
+            <div>
+                <table id="table-available-rooms" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td>Room's ID</td>
+                            <td>Room's Number</td>
+                            <td>Category</td>
+                            <td>Make Room Rental</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/bootbox.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $.ajax({
+                url: "/api/RoomCategories",
+                method: "Get",
+                async: false,
+                success: function (response) {
+                    $("#select-room-category").find("option").remove();
+                    for (var i = 0; i < response.length; i++) {
+                        $("#select-room-category").append("<option data=" + response[i].id + ">" + response[i].name + "</option>");
+                    }
+                },
+            });
+
+            $.ajax({
+                url: "/api/Rooms",
+                method: "get",
+                success: function (response) {
+                    $("table-available-rooms")
+                },
+            })
+        });
+    </script>
+</body>
+</html>

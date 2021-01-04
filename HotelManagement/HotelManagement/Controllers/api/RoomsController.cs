@@ -42,6 +42,11 @@ namespace HotelManagement.Controllers.api
 
             return roomsDto;
         }
+        public List<RoomDto> GetAvailableRoom()
+        {
+            return null;
+        }
+
         public RoomDto GetRoom(int id)
         {
             var room = this._context.Rooms.Find(id);

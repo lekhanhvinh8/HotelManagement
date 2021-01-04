@@ -180,3 +180,4 @@ C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\obj\Deb
 C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\obj\Debug\HotelManagement.csproj.GenerateResource.cache
 C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\obj\Debug\HotelManagement.Migrations.UpdateInvoiceIdNotIncreament.resources
 C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\obj\Debug\HotelManagement.Migrations.AddRoleAndAccountTable.resources
+C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\obj\Debug\HotelManagement.Migrations.AddRoomIsAvailableAndSomeConstraints.resources

@@ -2,6 +2,7 @@ namespace HotelManagement.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     public partial class Room
     {
@@ -14,8 +15,10 @@ namespace HotelManagement.Models
         public string RoomNumber { get; set; }
         public string Note { get; set; }
         public int RoomCategoryId { get; set; }
-
+        public bool IsAvailable { get; set; }
         public virtual RoomCategory RoomCategory { get; set; }
         public virtual ICollection<RoomRentalSlip> RoomRentalSlips { get; set; }
+
+        
     }
 }

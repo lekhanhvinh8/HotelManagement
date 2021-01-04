@@ -5,10 +5,14 @@ namespace HotelManagement.Models
 
     public partial class RoomRentalSlip
     {
-        public RoomRentalSlip()
+        public RoomRentalSlip(int roomId, DateTime dateStart, DateTime dateEnd)
         {
             this.Invoices = new HashSet<Invoice>();
             this.Guests = new HashSet<Guest>();
+
+            this.RoomId = roomId;
+            this.StartDate = dateStart;
+            this.EndDate = dateEnd;
         }
 
         public int Id { get; set; }
