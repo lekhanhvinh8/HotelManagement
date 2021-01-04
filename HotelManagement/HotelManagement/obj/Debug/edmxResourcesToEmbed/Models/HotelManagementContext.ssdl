@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="HotelManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="GuestCategories">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" />
+    <Property Name="Coefficient" Type="real" />
+  </EntityType>
+  <EntityType Name="Guests">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CMND" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" />
+    <Property Name="Address" Type="nvarchar(max)" />
+    <Property Name="GuestCategoryId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="InRoom">
+    <Key>
+      <PropertyRef Name="GuestId" />
+      <PropertyRef Name="RoomRentalSlipId" />
+    </Key>
+    <Property Name="GuestId" Type="int" Nullable="false" />
+    <Property Name="RoomRentalSlipId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Invoice">
+    <Key>
+      <PropertyRef Name="RoomRentalSlipId" />
+      <PropertyRef Name="GuestId" />
+      <PropertyRef Name="DateOfInvoice" />
+    </Key>
+    <Property Name="RoomRentalSlipId" Type="int" Nullable="false" />
+    <Property Name="GuestId" Type="int" Nullable="false" />
+    <Property Name="DateOfInvoice" Type="datetime" Nullable="false" />
+    <Property Name="TotalCost" Type="real" />
+  </EntityType>
+  <EntityType Name="RoomCategories">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" />
+    <Property Name="UnitPrice" Type="real" />
+    <Property Name="MaxNumberOfGuests" Type="int" />
+    <Property Name="NumStartSurcharge" Type="int" />
+    <Property Name="SurchargeRate" Type="real" />
+  </EntityType>
+  <EntityType Name="RoomRentalSlip">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RoomId" Type="int" Nullable="false" />
+    <Property Name="StartDate" Type="datetime" Nullable="false" />
+    <Property Name="EndDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Rooms">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RoomNumber" Type="char" MaxLength="10" Nullable="false" />
+    <Property Name="Note" Type="nvarchar(max)" />
+    <Property Name="RoomCategoryId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK__InRoom__GuestId__37A5467C">
+    <End Role="Guests" Type="Self.Guests" Multiplicity="1" />
+    <End Role="InRoom" Type="Self.InRoom" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Guests">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="InRoom">
+        <PropertyRef Name="GuestId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__InRoom__RoomRent__38996AB5">
+    <End Role="RoomRentalSlip" Type="Self.RoomRentalSlip" Multiplicity="1" />
+    <End Role="InRoom" Type="Self.InRoom" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RoomRentalSlip">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="InRoom">
+        <PropertyRef Name="RoomRentalSlipId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Invoice__GuestId__34C8D9D1">
+    <End Role="Guests" Type="Self.Guests" Multiplicity="1" />
+    <End Role="Invoice" Type="Self.Invoice" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Guests">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Invoice">
+        <PropertyRef Name="GuestId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Invoice__RoomRen__33D4B598">
+    <End Role="RoomRentalSlip" Type="Self.RoomRentalSlip" Multiplicity="1" />
+    <End Role="Invoice" Type="Self.Invoice" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RoomRentalSlip">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Invoice">
+        <PropertyRef Name="RoomRentalSlipId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__RoomRenta__RoomI__30F848ED">
+    <End Role="Rooms" Type="Self.Rooms" Multiplicity="1" />
+    <End Role="RoomRentalSlip" Type="Self.RoomRentalSlip" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Rooms">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="RoomRentalSlip">
+        <PropertyRef Name="RoomId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="guestsFKCategoryID">
+    <End Role="GuestCategories" Type="Self.GuestCategories" Multiplicity="1" />
+    <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GuestCategories">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Guests">
+        <PropertyRef Name="GuestCategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="roomsFKCategoryID">
+    <End Role="RoomCategories" Type="Self.RoomCategories" Multiplicity="1" />
+    <End Role="Rooms" Type="Self.Rooms" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RoomCategories">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Rooms">
+        <PropertyRef Name="RoomCategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="HotelManagementModelStoreContainer">
+    <EntitySet Name="GuestCategories" EntityType="Self.GuestCategories" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Guests" EntityType="Self.Guests" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="InRoom" EntityType="Self.InRoom" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Invoice" EntityType="Self.Invoice" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RoomCategories" EntityType="Self.RoomCategories" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RoomRentalSlip" EntityType="Self.RoomRentalSlip" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Rooms" EntityType="Self.Rooms" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__InRoom__GuestId__37A5467C" Association="Self.FK__InRoom__GuestId__37A5467C">
+      <End Role="Guests" EntitySet="Guests" />
+      <End Role="InRoom" EntitySet="InRoom" />
+    </AssociationSet>
+    <AssociationSet Name="FK__InRoom__RoomRent__38996AB5" Association="Self.FK__InRoom__RoomRent__38996AB5">
+      <End Role="RoomRentalSlip" EntitySet="RoomRentalSlip" />
+      <End Role="InRoom" EntitySet="InRoom" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Invoice__GuestId__34C8D9D1" Association="Self.FK__Invoice__GuestId__34C8D9D1">
+      <End Role="Guests" EntitySet="Guests" />
+      <End Role="Invoice" EntitySet="Invoice" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Invoice__RoomRen__33D4B598" Association="Self.FK__Invoice__RoomRen__33D4B598">
+      <End Role="RoomRentalSlip" EntitySet="RoomRentalSlip" />
+      <End Role="Invoice" EntitySet="Invoice" />
+    </AssociationSet>
+    <AssociationSet Name="FK__RoomRenta__RoomI__30F848ED" Association="Self.FK__RoomRenta__RoomI__30F848ED">
+      <End Role="Rooms" EntitySet="Rooms" />
+      <End Role="RoomRentalSlip" EntitySet="RoomRentalSlip" />
+    </AssociationSet>
+    <AssociationSet Name="guestsFKCategoryID" Association="Self.guestsFKCategoryID">
+      <End Role="GuestCategories" EntitySet="GuestCategories" />
+      <End Role="Guests" EntitySet="Guests" />
+    </AssociationSet>
+    <AssociationSet Name="roomsFKCategoryID" Association="Self.roomsFKCategoryID">
+      <End Role="RoomCategories" EntitySet="RoomCategories" />
+      <End Role="Rooms" EntitySet="Rooms" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

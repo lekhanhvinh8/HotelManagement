@@ -7,14 +7,14 @@ namespace HotelManagement.Models.Dtos
 {
     public class RoomCategoryDto
     {
-        public RoomCategoryDto(Room_categories roomCategory)
+        public RoomCategoryDto(RoomCategory roomCategory)
         {
-            this.id = roomCategory.id;
-            this.name = roomCategory.name;
-            this.unit_price = roomCategory.unit_price;
-            this.max_number_of_guests = roomCategory.max_number_of_guests;
-            this.surcharge_rate = roomCategory.surcharge_rate;
-            this.num_start_surcharge = roomCategory.num_start_surcharge;
+            this.id = roomCategory.Id;
+            this.name = roomCategory.Name;
+            this.UnitPrice = roomCategory.UnitPrice;
+            this.MaxNumberOfGuest = roomCategory.MaxNumberOfGuests;
+            this.SurchargeRate = roomCategory.SurchargeRate;
+            this.NumStartSurcharge = roomCategory.NumStartSurcharge;
             this.RoomsDto = new List<RoomDto>();
             foreach (var room in roomCategory.Rooms)
             {
@@ -28,31 +28,31 @@ namespace HotelManagement.Models.Dtos
 
         public int id { get; set; }
         public string name { get; set; }
-        public Nullable<float> unit_price { get; set; }
-        public Nullable<int> max_number_of_guests { get; set; }
-        public Nullable<int> num_start_surcharge { get; set; }
-        public Nullable<float> surcharge_rate { get; set; }
+        public float UnitPrice { get; set; }
+        public int MaxNumberOfGuest { get; set; }
+        public int NumStartSurcharge { get; set; }
+        public float SurchargeRate { get; set; }
 
         public List<RoomDto> RoomsDto;
-        public Room_categories CreateModel()
+        public RoomCategory CreateModel()
         {
-            var roomCategory = new Room_categories();
-            roomCategory.name = this.name;
-            roomCategory.max_number_of_guests = this.max_number_of_guests;
-            roomCategory.num_start_surcharge = this.num_start_surcharge;
-            roomCategory.surcharge_rate = this.surcharge_rate;
-            roomCategory.unit_price = this.unit_price;
+            var roomCategory = new RoomCategory();
+            roomCategory.Name = this.name;
+            roomCategory.MaxNumberOfGuests = this.MaxNumberOfGuest;
+            roomCategory.NumStartSurcharge = this.NumStartSurcharge;
+            roomCategory.SurchargeRate = this.SurchargeRate;
+            roomCategory.UnitPrice = this.UnitPrice;
 
             return roomCategory;
         }
 
-        public Room_categories Update(Room_categories roomCategory)
+        public RoomCategory Update(RoomCategory roomCategory)
         {
-            roomCategory.name = this.name;
-            roomCategory.max_number_of_guests = this.max_number_of_guests;
-            roomCategory.num_start_surcharge = this.num_start_surcharge;
-            roomCategory.surcharge_rate = this.surcharge_rate;
-            roomCategory.unit_price = this.unit_price;
+            roomCategory.Name = this.name;
+            roomCategory.MaxNumberOfGuests = this.MaxNumberOfGuest;
+            roomCategory.NumStartSurcharge = this.NumStartSurcharge;
+            roomCategory.SurchargeRate = this.SurchargeRate;
+            roomCategory.UnitPrice = this.UnitPrice;
 
             return roomCategory;
         }

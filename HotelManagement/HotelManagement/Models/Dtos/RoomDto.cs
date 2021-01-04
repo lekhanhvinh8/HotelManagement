@@ -13,34 +13,34 @@ namespace HotelManagement.Models.Dtos
         }
         public RoomDto(Room room)
         {
-            this.id = room.id;
-            this.room_number = room.room_number;
-            this.note = room.note;
-            this.room_category_id = room.room_category_id;
+            this.Id = room.Id;
+            this.RoomNumber = room.RoomNumber;
+            this.Note = room.Note;
+            this.RoomCategoryID = room.RoomCategoryId;
         }
-        public int id { get; set; }
+        public int Id { get; set; }
 
         [StringLength(10)]
-        public string room_number { get; set; }
-        public string note { get; set; }
-        public int room_category_id { get; set; }
+        public string RoomNumber { get; set; }
+        public string Note { get; set; }
+        public int RoomCategoryID { get; set; }
 
         public Room CreateModel()
         {
             var room = new Room();
 
-            room.room_number = this.room_number;
-            room.note = this.note;
-            room.room_category_id = this.room_category_id;
+            room.RoomNumber = this.RoomNumber;
+            room.Note = this.Note;
+            room.RoomCategoryId = this.RoomCategoryID;
 
             return room;
         }
 
         public Room Update(Room room)
         {
-            room.room_number = this.room_number;
-            room.note = this.note;
-            room.room_category_id = this.room_category_id;
+            room.RoomNumber = this.RoomNumber;
+            room.Note = this.Note;
+            room.RoomCategoryId = this.RoomCategoryID;
 
             return room;
         }

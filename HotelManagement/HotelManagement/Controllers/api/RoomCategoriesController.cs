@@ -15,13 +15,13 @@ namespace HotelManagement.Controllers.api
 
         public RoomCategoriesController()
         {
-            this._context = new HotelManagementDbContext();
+            this._context = new HotelManagementDbContext() ;
         }
 
         public List<RoomCategoryDto> GetAll()
         {
             var roomCategoriesDto = new List<RoomCategoryDto>();
-            foreach (var roomCategory in this._context.Room_categories.Include(r => r.Rooms).ToList())
+            foreach (var roomCategory in this._context.RoomCategories.Include(r => r.Rooms).ToList())
             {
                 roomCategoriesDto.Add(new RoomCategoryDto(roomCategory));
             }
@@ -31,7 +31,7 @@ namespace HotelManagement.Controllers.api
 
         public RoomCategoryDto Get(int id)
         {
-            var roomCategory = this._context.Room_categories.Include(r => r.Rooms).SingleOrDefault(r => r.id == id);
+            var roomCategory = this._context.RoomCategories.Include(r => r.Rooms).SingleOrDefault(r => r.Id == id);
 
             if (roomCategory == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -44,7 +44,7 @@ namespace HotelManagement.Controllers.api
         {
             var roomCategory = roomCategoryDto.CreateModel();
 
-            this._context.Room_categories.Add(roomCategory);
+            this._context.RoomCategories.Add(roomCategory);
             this._context.SaveChanges();
 
             return new RoomCategoryDto(roomCategory);
@@ -53,7 +53,7 @@ namespace HotelManagement.Controllers.api
         [HttpPut]
         public RoomCategoryDto Update(RoomCategoryDto roomCategoryDto) 
         {
-            var roomCategory = this._context.Room_categories.Include(r => r.Rooms).SingleOrDefault(r => r.id == roomCategoryDto.id);
+            var roomCategory = this._context.RoomCategories.Include(r => r.Rooms).SingleOrDefault(r => r.Id == roomCategoryDto.id);
 
             if (roomCategory == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -67,12 +67,12 @@ namespace HotelManagement.Controllers.api
         [HttpDelete]
         public RoomCategoryDto Delete(int id)
         {
-            var roomCategory = this._context.Room_categories.Find(id);
+            var roomCategory = this._context.RoomCategories.Find(id);
 
             if (roomCategory == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            this._context.Room_categories.Remove(roomCategory);
+            this._context.RoomCategories.Remove(roomCategory);
             this._context.SaveChanges();
 
             return new RoomCategoryDto(roomCategory);

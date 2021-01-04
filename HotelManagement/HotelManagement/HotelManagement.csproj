@@ -143,50 +143,31 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\api\GuestCategoriesController.cs" />
     <Compile Include="Controllers\api\RoomCategoriesController.cs" />
     <Compile Include="Controllers\api\RoomsController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Bill.cs">
-      <DependentUpon>HotelManagementDbContext.tt</DependentUpon>
+    <Compile Include="Migrations\202101030952074_Initial Model.cs" />
+    <Compile Include="Migrations\202101030952074_Initial Model.designer.cs">
+      <DependentUpon>202101030952074_Initial Model.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202101031246248_UpdateInvoiceIdNotIncreament.cs" />
+    <Compile Include="Migrations\202101031246248_UpdateInvoiceIdNotIncreament.designer.cs">
+      <DependentUpon>202101031246248_UpdateInvoiceIdNotIncreament.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Dtos\GuestCategoryDto.cs" />
     <Compile Include="Models\Dtos\RoomCategoryDto.cs" />
     <Compile Include="Models\Dtos\RoomDto.cs" />
-    <Compile Include="Models\Guest.cs">
-      <DependentUpon>HotelManagementDbContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Guest_categories.cs">
-      <DependentUpon>HotelManagementDbContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\HotelManagementDbContext.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>HotelManagementDbContext.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\HotelManagementDbContext.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>HotelManagementDbContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\HotelManagementDbContext.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>HotelManagementDbContext.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Room.cs">
-      <DependentUpon>HotelManagementDbContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Room_categories.cs">
-      <DependentUpon>HotelManagementDbContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Room_rental_slip.cs">
-      <DependentUpon>HotelManagementDbContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sysdiagram.cs">
-      <DependentUpon>HotelManagementDbContext.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Models\Guest.cs" />
+    <Compile Include="Models\GuestCategory.cs" />
+    <Compile Include="Models\HotelManagementDbContext.cs" />
+    <Compile Include="Models\Invoice.cs" />
+    <Compile Include="Models\Room.cs" />
+    <Compile Include="Models\RoomCategory.cs" />
+    <Compile Include="Models\RoomRentalSlip.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -352,20 +333,11 @@
     <Content Include="Content\DataTables\images\sort_desc.png" />
     <Content Include="Content\DataTables\images\sort_desc_disabled.png" />
     <Content Include="Content\DataTables\swf\flashExport.swf" />
+    <Content Include="Content\sb-admin-2.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Models\HotelManagementDbContext.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>HotelManagementDbContext.edmx</DependentUpon>
-      <LastGenOutput>HotelManagementDbContext.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\HotelManagementDbContext.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>HotelManagementDbContext.edmx</DependentUpon>
-      <LastGenOutput>HotelManagementDbContext.cs</LastGenOutput>
-    </Content>
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -373,14 +345,9 @@
     <Content Include="Content\DataTables\css\semanticui.scss" />
     <Content Include="Content\DataTables\css\mixins.scss" />
     <Content Include="Content\DataTables\css\common.scss" />
-    <EntityDeploy Include="Models\HotelManagementDbContext.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>HotelManagementDbContext.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\HotelManagementDbContext.edmx.diagram">
-      <DependentUpon>HotelManagementDbContext.edmx</DependentUpon>
-    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\chart-area-demo.js" />
+    <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\copy_csv_xls_pdf.swf" />
     <Content Include="Scripts\dataTables.bootstrap.js" />
     <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
@@ -485,10 +452,8 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\RevenueAreaChart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -509,6 +474,14 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202101030952074_Initial Model.resx">
+      <DependentUpon>202101030952074_Initial Model.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101031246248_UpdateInvoiceIdNotIncreament.resx">
+      <DependentUpon>202101031246248_UpdateInvoiceIdNotIncreament.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="HotelManagementModelStoreContainer" CdmEntityContainer="HotelManagementEntities">
+    <EntitySetMapping Name="GuestCategories">
+      <EntityTypeMapping TypeName="HotelManagementModel.GuestCategory">
+        <MappingFragment StoreEntitySet="GuestCategories">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Coefficient" ColumnName="Coefficient" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Guests">
+      <EntityTypeMapping TypeName="HotelManagementModel.Guest">
+        <MappingFragment StoreEntitySet="Guests">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CMND" ColumnName="CMND" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="GuestCategoryId" ColumnName="GuestCategoryId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Invoices">
+      <EntityTypeMapping TypeName="HotelManagementModel.Invoice">
+        <MappingFragment StoreEntitySet="Invoice">
+          <ScalarProperty Name="RoomRentalSlipId" ColumnName="RoomRentalSlipId" />
+          <ScalarProperty Name="GuestId" ColumnName="GuestId" />
+          <ScalarProperty Name="DateOfInvoice" ColumnName="DateOfInvoice" />
+          <ScalarProperty Name="TotalCost" ColumnName="TotalCost" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RoomCategories">
+      <EntityTypeMapping TypeName="HotelManagementModel.RoomCategory">
+        <MappingFragment StoreEntitySet="RoomCategories">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+          <ScalarProperty Name="MaxNumberOfGuests" ColumnName="MaxNumberOfGuests" />
+          <ScalarProperty Name="NumStartSurcharge" ColumnName="NumStartSurcharge" />
+          <ScalarProperty Name="SurchargeRate" ColumnName="SurchargeRate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RoomRentalSlips">
+      <EntityTypeMapping TypeName="HotelManagementModel.RoomRentalSlip">
+        <MappingFragment StoreEntitySet="RoomRentalSlip">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="RoomId" ColumnName="RoomId" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Rooms">
+      <EntityTypeMapping TypeName="HotelManagementModel.Room">
+        <MappingFragment StoreEntitySet="Rooms">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="RoomNumber" ColumnName="RoomNumber" />
+          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="RoomCategoryId" ColumnName="RoomCategoryId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="InRoom" TypeName="HotelManagementModel.InRoom" StoreEntitySet="InRoom">
+      <EndProperty Name="Guests">
+        <ScalarProperty Name="Id" ColumnName="GuestId" />
+      </EndProperty>
+      <EndProperty Name="RoomRentalSlip">
+        <ScalarProperty Name="Id" ColumnName="RoomRentalSlipId" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>

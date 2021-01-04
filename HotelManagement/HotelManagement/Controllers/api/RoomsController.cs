@@ -31,7 +31,7 @@ namespace HotelManagement.Controllers.api
         }
         public List<RoomDto> GetSome(int roomCategoryId)
         {
-            var rooms = this._context.Rooms.Where(r => r.room_category_id == roomCategoryId);
+            var rooms = this._context.Rooms.Where(r => r.RoomCategoryId == roomCategoryId);
 
             var roomsDto = new List<RoomDto>();
 
@@ -64,7 +64,7 @@ namespace HotelManagement.Controllers.api
         [HttpPut]
         public RoomDto Update(RoomDto roomDto)
         {
-            var room = this._context.Rooms.Find(roomDto.id);
+            var room = this._context.Rooms.Find(roomDto.Id);
             if (room == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 

@@ -13,6 +13,9 @@ namespace HotelManagement.Controllers
         {
             return View();
         }
-
+        public ActionResult RevenueAreaChart()
+        {
+            return View();
+        }
     }
 }
