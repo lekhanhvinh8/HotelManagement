@@ -1,0 +1,93 @@
+﻿@model PagedList.IPagedList<HotelManagement.Models.RoomRentalSlip>
+@using PagedList.Mvc;
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div>
+	<div class="">
+		<h2 class="h2"> List of Room Rental Slips</h2>
+		<table class="table">
+			<thead>
+				<tr>
+					<td>Rental Slip Number</td>
+					<td>Room</td>
+					<td>Num of Guest</td>
+					<td>Check-in Day</td>
+					<td>Check-out Day</td>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model)
+				{
+					<tr>
+						<td> @item.Id</td >
+						<td> @item.Room.RoomNumber</td >
+						<td> @item.Guests.Count</td >
+						<td> @item.StartDate</td >
+						<td> @item.EndDate</td >
+						<td>
+							<a href="#" data-toggle="modal" data-target="#details">Detail </a >
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+	<div style="border-top: 1px groove;">
+		@Html.PagedListPager(Model, Page => Url.Action("RoomRentalSlip", new { Page }))
+	</div>
+	<div style="float:right; margin: 2rem 0 2rem; padding-top:1rem;	">
+		<button class="btn btn-primary"> Create invoice </button>
+	</div>
+</div>
+
+
+<div class="modal fade" id="details" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="exampleModalLabel">Room Rental Slip Details</h4>
+				<button class="close" id="closeInfo" type="button" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span >
+				</button>
+			</div>
+			<div class="modal-body">
+				<div id="notifyInfo" class="notify">
+					</ div >
+					<div class="form-group">
+						@foreach (var i in Model)
+						{
+							<label>Room Category: @i.Room.RoomCategory.Name </label>
+							<div class="form-group">
+								<h2>Guest Infomation</h2>
+								<table class="table">
+									<thead>
+										<tr>
+											<td> Name</td>
+											<td> Identity Card</td>
+											<td> Address</td>
+											<td> Guest Category</td>
+										</tr>
+									</thead>
+									<tbody>
+										@foreach (var j in i.Guests)
+										{
+											<tr>
+												<td> @j.Name</td>
+												<td> @j.CMND</td>
+												<td> @j.Address</td>
+												<td> @j.GuestCategory.Name</td>
+											</tr>
+										}
+									</tbody>
+								</table>
+							</div>
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
