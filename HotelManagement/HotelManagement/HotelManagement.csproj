@@ -157,7 +157,12 @@
     <Compile Include="Migrations\202101031246248_UpdateInvoiceIdNotIncreament.designer.cs">
       <DependentUpon>202101031246248_UpdateInvoiceIdNotIncreament.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202101040751082_AddRoleAndAccountTable.cs" />
+    <Compile Include="Migrations\202101040751082_AddRoleAndAccountTable.designer.cs">
+      <DependentUpon>202101040751082_AddRoleAndAccountTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Dtos\GuestCategoryDto.cs" />
     <Compile Include="Models\Dtos\RoomCategoryDto.cs" />
     <Compile Include="Models\Dtos\RoomDto.cs" />
@@ -165,9 +170,11 @@
     <Compile Include="Models\GuestCategory.cs" />
     <Compile Include="Models\HotelManagementDbContext.cs" />
     <Compile Include="Models\Invoice.cs" />
+    <Compile Include="Models\Role.cs" />
     <Compile Include="Models\Room.cs" />
     <Compile Include="Models\RoomCategory.cs" />
     <Compile Include="Models\RoomRentalSlip.cs" />
+    <Compile Include="Models\Syptop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -481,6 +488,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202101031246248_UpdateInvoiceIdNotIncreament.resx">
       <DependentUpon>202101031246248_UpdateInvoiceIdNotIncreament.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101040751082_AddRoleAndAccountTable.resx">
+      <DependentUpon>202101040751082_AddRoleAndAccountTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

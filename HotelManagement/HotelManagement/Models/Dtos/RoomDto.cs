@@ -17,6 +17,7 @@ namespace HotelManagement.Models.Dtos
             this.RoomNumber = room.RoomNumber;
             this.Note = room.Note;
             this.RoomCategoryID = room.RoomCategoryId;
+            this.RoomCategoryName = room.RoomCategory.Name;
         }
         public int Id { get; set; }
 
@@ -25,6 +26,7 @@ namespace HotelManagement.Models.Dtos
         public string Note { get; set; }
         public int RoomCategoryID { get; set; }
 
+        public string RoomCategoryName { get; set; }
         public Room CreateModel()
         {
             var room = new Room();

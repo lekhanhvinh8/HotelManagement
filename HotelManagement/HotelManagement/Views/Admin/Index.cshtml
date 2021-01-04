@@ -81,8 +81,8 @@
                 </div>
                 <div id="tab-room-management" class="tab-pane" role="tabpanel">
                     <div>
-                        <div class="form-group">
-                            <label for="room-category-id">Category ID</label>
+                        <div class="form-group" style="width:30%;">
+                            <label for="room-category-id">Room Category</label>
                             <select id="room-room-category-id" class="form-control" name="roomCategoryId">
                                 
                             </select>
@@ -237,14 +237,14 @@
                 success: function (response) {
                     $("#room-room-category-id").find("option").remove();
                     for (var i = 0; i < response.length; i++) {
-                        $("#room-room-category-id").append("<option>" + response[i].id + "</option>");
+                        $("#room-room-category-id").append("<option data=" + response[i].id + ">" + response[i].name + "</option>");
                     }
                 },
             });
 
             var dataTableRoom = $("#table-rooms").DataTable({
                 ajax: {
-                    url: "/api/Rooms/GetSome?roomCategoryId=" + $("#room-room-category-id").val(),
+                    url: "/api/Rooms/GetSome?roomCategoryId=" + $("#room-room-category-id option:selected").attr("data"),
                     dataSrc: "",
                 },
                 columns: [
@@ -270,8 +270,8 @@
                         },
                     },
                     {
-                        title: "Room Category ID",
-                        data: "roomCategoryID",
+                        title: "Room Category",
+                        data: "roomCategoryName",
                         render: function (data) {
                             return data;
                         },
@@ -352,7 +352,7 @@
                         success: function (response) {
                             $("#room-room-category-id").find("option").remove();
                             for (var i = 0; i < response.length; i++) {
-                                $("#room-room-category-id").append("<option>" + response[i].id + "</option>");
+                                $("#room-room-category-id").append("<option data=" + response[i].id + ">" + response[i].name + "</option>");
                             }
                         },
                     });
@@ -412,7 +412,7 @@
 
             //Room management
             $("#room-room-category-id").on("change", function () {
-                dataTableRoom.ajax.url('/api/Rooms/GetSome?roomCategoryId=' + $("#room-room-category-id").val()).load();
+                dataTableRoom.ajax.url('/api/Rooms/GetSome?roomCategoryId=' + $("#room-room-category-id option:selected").attr("data")).load();
                 dataTableRoom.ajax.reload();
             });
             
@@ -718,14 +718,14 @@
                                         data: {
                                             roomNumber: items.number,
                                             note: items.note,
-                                            roomCategoryID: $("#room-room-category-id").val(),
+                                            roomCategoryID: $("#room-room-category-id option:selected").attr("data"),
                                         },
                                         success: function (response) {
                                             var trDOM = table.row.add({
                                                 id: response.id,
                                                 roomNumber: response.roomNumber,
                                                 note: response.note,
-                                                roomCategoryID: response.roomCategoryID,
+                                                roomCategoryName: response.roomCategoryName,
                                             }).draw(false).node();
                                         },
                                     });
@@ -757,7 +757,7 @@
                                             id: $("#room-id").attr("value"),
                                             roomNumber: items.number,
                                             note: items.note,
-                                            roomCategoryID: $("#room-room-category-id").val(),
+                                            roomCategoryID: $("#room-room-category-id option:selected").attr("data"),
                                         },
                                         success: function (response) {
                                             var indexes = table.rows().eq(0).filter(function (rowIdx) {
@@ -767,7 +767,7 @@
                                             var newData = table.row(indexes[0]).data();
                                             newData.roomNumber = response.roomNumber;
                                             newData.note = response.note;
-                                            newData.roomCategoryID = response.roomCategoryID;
+                                            newData.roomCategoryName = response.roomCategoryName;
 
                                             table.row(indexes[0]).data(newData).draw();
                                         },

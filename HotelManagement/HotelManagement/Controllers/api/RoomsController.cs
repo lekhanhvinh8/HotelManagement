@@ -55,6 +55,9 @@ namespace HotelManagement.Controllers.api
         {
             var room = roomDto.CreateModel();
 
+            var roomCategory = this._context.RoomCategories.Find(roomDto.RoomCategoryID);
+            room.RoomCategory = roomCategory;
+
             this._context.Rooms.Add(room);
             this._context.SaveChanges();
 
@@ -82,10 +85,12 @@ namespace HotelManagement.Controllers.api
             if (room == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
+            var roomDto = new RoomDto(room);
+
             this._context.Rooms.Remove(room);
             this._context.SaveChanges();
 
-            return new RoomDto(room);
+            return roomDto;
         }
     }
 }
