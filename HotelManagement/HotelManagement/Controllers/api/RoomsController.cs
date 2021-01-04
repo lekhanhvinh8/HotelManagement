@@ -31,22 +31,46 @@ namespace HotelManagement.Controllers.api
         }
         public List<RoomDto> GetSome(int roomCategoryId)
         {
-            var rooms = this._context.Rooms.Where(r => r.RoomCategoryId == roomCategoryId);
+            var rooms = this._context.Rooms.Where(r => r.RoomCategoryId == roomCategoryId).ToList();
 
-            var roomsDto = new List<RoomDto>();
+            var roomDtos = new List<RoomDto>();
 
             foreach (var room in rooms)
             {
-                roomsDto.Add(new RoomDto(room));
+                roomDtos.Add(new RoomDto(room));
             }
 
-            return roomsDto;
+            return roomDtos;
         }
-        public List<RoomDto> GetAvailableRoom()
+        public List<RoomDto> GetAvailableRooms()
         {
-            return null;
+            var rooms = this._context.Rooms.Where(r => r.IsAvailable == true).ToList();
+
+            var roomDtos = new List<RoomDto>();
+
+            foreach (var room in rooms)
+            {
+                roomDtos.Add(new RoomDto(room));
+            }
+
+            return roomDtos;
         }
 
+        public List<RoomDto> GetAvailableRooms(int roomCategoryId)
+        {
+            var rooms = this._context.Rooms.Where(r => r.IsAvailable == true)
+                                           .Where(r => r.RoomCategoryId == roomCategoryId)
+                                           .ToList();
+
+            var roomDtos = new List<RoomDto>();
+
+            foreach (var room in rooms)
+            {
+                roomDtos.Add(new RoomDto(room));
+            }
+
+            return roomDtos;
+        }
         public RoomDto GetRoom(int id)
         {
             var room = this._context.Rooms.Find(id);

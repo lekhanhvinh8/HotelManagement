@@ -9,6 +9,7 @@ namespace HotelManagement.Models
         public Room()
         {
             this.RoomRentalSlips = new HashSet<RoomRentalSlip>();
+            this.IsAvailable = true;
         }
 
         public int Id { get; set; }

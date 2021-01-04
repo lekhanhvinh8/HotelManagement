@@ -908,7 +908,7 @@
         jQuery.validator.addMethod("checkUniqueRoomNumberAdd", function (value) {
             var isValid = true;
             $.ajax({
-                url: "/api/Rooms",
+                url: "/api/Rooms/GetAll",
                 method: "Get",
                 async: false,
                 success: function (response) {
@@ -925,7 +925,7 @@
         jQuery.validator.addMethod("checkUniqueRoomNumberUpdate", function (value) {
             var isValid = true;
             $.ajax({
-                url: "/api/Rooms",
+                url: "/api/Rooms/GetAll",
                 method: "Get",
                 async: false,
                 success: function (response) {

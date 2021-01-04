@@ -32,7 +32,7 @@ namespace HotelManagement.Models
             modelBuilder.Entity<Room>().HasIndex(r => r.RoomNumber).IsUnique();
 
             modelBuilder.Entity<Guest>().Property(g => g.CMND).IsRequired();
-            modelBuilder.Entity<Guest>().HasIndex(g => g.CMND).IsUnique();
+            //modelBuilder.Entity<Guest>().HasIndex(g => g.CMND).IsUnique();
 
             modelBuilder.Entity<RoomRentalSlip>().HasIndex(r => new { r.RoomId, r.StartDate, r.EndDate }).IsUnique();
             modelBuilder.Entity<RoomRentalSlip>().HasRequired(r => r.Room).WithMany(r => r.RoomRentalSlips);

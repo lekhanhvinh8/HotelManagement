@@ -166,6 +166,10 @@
     <Compile Include="Migrations\202101041140172_AddRoomIsAvailableAndSomeConstraints.designer.cs">
       <DependentUpon>202101041140172_AddRoomIsAvailableAndSomeConstraints.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202101041623392_removeGuestCMNDUnique.cs" />
+    <Compile Include="Migrations\202101041623392_removeGuestCMNDUnique.designer.cs">
+      <DependentUpon>202101041623392_removeGuestCMNDUnique.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Dtos\GuestCategoryDto.cs" />
@@ -443,6 +447,7 @@
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui.js" />
     <Content Include="Scripts\jquery.dataTables.js" />
     <Content Include="Scripts\jquery.dataTables.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -500,6 +505,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202101041140172_AddRoomIsAvailableAndSomeConstraints.resx">
       <DependentUpon>202101041140172_AddRoomIsAvailableAndSomeConstraints.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101041623392_removeGuestCMNDUnique.resx">
+      <DependentUpon>202101041623392_removeGuestCMNDUnique.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

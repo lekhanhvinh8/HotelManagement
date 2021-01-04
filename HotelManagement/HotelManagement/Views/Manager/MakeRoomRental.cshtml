@@ -17,7 +17,7 @@
         <div>
             <div>
                 <label for="searchRoomName">Search by room number</label>
-                <input id="search-by-roomNumber" type="text" class="form-control" style="width: 30%;"/>
+                <input id="search-by-roomNumber" type="text" class="form-control" style="width: 30%;" />
             </div>
         </div>
         <div>
@@ -36,17 +36,52 @@
                         </tr>
                     </thead>
                     <tbody>
-
                     </tbody>
                 </table>
+
+                <div id="room-rental-slip-dialog" style="display: none;">
+                    <form id="form-room-rental-slip">
+                        <div class="form-group">
+                            <label for="startDatePicker" class="control-label">Started Date</label>
+                            <input type="text" name="startDatePicker" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label for="endDatePicker" class="control-label">End Date</label>
+                            <input type="text" name="endDatePicker" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <table name="tableGuests" class="table table-bordered">
+                                <colgroup>
+                                    <col span="1" style="width: 20%;">
+                                    <col span="1" style="width: 20%;">
+                                    <col span="1" style="width: 30%;">
+                                    <col span="1" style="width: 30%;">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <td>CMND</td>
+                                        <td>Name</td>
+                                        <td>Guest's Category</td>
+                                        <td>Address</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
 
     </div>
 
     <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
     <script src="~/Scripts/bootstrap.js"></script>
     <script src="~/Scripts/bootbox.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
 
     <script>
         $(document).ready(function () {
@@ -63,13 +98,99 @@
                 },
             });
 
-            $.ajax({
-                url: "/api/Rooms",
-                method: "get",
-                success: function (response) {
-                    $("table-available-rooms")
-                },
-            })
+            ReloadTableRooms();
+
+            $("#select-room-category").on("change", function () {
+                ReloadTableRooms();
+            });
+
+            $("#table-available-rooms tbody").on("click", ".js-make-rental-slip", function () {
+                var button = $(this);
+
+                var dialogBootbox = bootbox.dialog({
+                    message: $("#room-rental-slip-dialog").html(),
+                    title: "Make room rental slip",
+                    buttons: [
+                        {
+                            label: "Save",
+                            className: "btn btn-primary",
+                            callback: function () {
+
+                            }
+                        },
+                    ],
+                });
+
+                //Set up date form
+                var startDate = dialogBootbox.find("#form-room-rental-slip input[name='startDatePicker']");
+                var endDate = dialogBootbox.find("#form-room-rental-slip input[name='endDatePicker']");
+
+                var d = new Date();
+
+                var date = d.getDate();
+                var month = d.getMonth() + 1; // Since getMonth() returns month from 0-11 not 1-12
+                var year = d.getFullYear();
+
+                var dateStr1 = new Intl.DateTimeFormat('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }).format(d);
+                var dateStr2 = month + "/" + date + "/" + year;
+
+                startDate.val(dateStr1);
+
+                endDate.datepicker({ dateFormat: "yy-mm-dd" });
+
+                //Set up guest form
+                var tableGuest = dialogBootbox.find("#form-room-rental-slip table[name='tableGuests']");
+                var roomCategoryID = $(button).attr("data-room-category");
+                $.ajax({
+                    url: "/api/RoomCategories/Get?id=" + roomCategoryID,
+                    method: "get",
+                    success: function (response) {
+                        for (var i = 0; i < response.maxNumberOfGuest; i++) {
+                            var markup = "<tr>"
+                                + "<td><input type='text' class='form-control'/></td>"
+                                + "<td><input type='text' class='form-control'/></td>"
+                                + "<td><select class='form-control'>";
+
+                            $.ajax({
+                                url: "/api/GuestCategories",
+                                method: "get",
+                                async: false,
+                                success: function (response) {
+                                    for (var i = 0; i < response.length; i++) {
+                                        markup += "<option data=" + response.id + ">" + response[i].name + "</option>";
+                                    }
+                                }
+                            });
+
+                            markup += "</select></td>"
+                                + "<td><input type='text' class='form-control'/></td>"
+                                + "</tr>";
+                            tableGuest.append(markup);
+                        }
+                    }
+                });
+            });
+
+            function ReloadTableRooms() {
+                $("#table-available-rooms tbody tr").remove();
+
+                $.ajax({
+                    url: "/api/Rooms/GetAvailableRooms?roomCategoryID=" + $("#select-room-category option:selected").attr("data"),
+                    method: "get",
+                    success: function (response) {
+                        for (var i = 0; i < response.length; i++) {
+                            var markup = "<tr data=" + response[i].id + ">"
+                                + "<td>" + response[i].id + "</td>"
+                                + "<td>" + response[i].roomNumber + "</td>"
+                                + "<td data=" + response[i].roomCategoryID + ">" + response[i].roomCategoryName + "</td>"
+                                + "<td><button class='btn btn-success js-make-rental-slip' data-room-category=" + response[i].roomCategoryID + ">Make rental slip</button></td>";
+
+
+                            $("#table-available-rooms").append(markup);
+                        }
+                    },
+                })
+            }
         });
     </script>
 </body>
