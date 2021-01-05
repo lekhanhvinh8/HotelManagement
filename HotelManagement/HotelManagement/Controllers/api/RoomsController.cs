@@ -71,6 +71,19 @@ namespace HotelManagement.Controllers.api
 
             return roomDtos;
         }
+
+        public RoomDto GetAvailableRoom(string roomNumber)
+        {
+            var rooms = this._context.Rooms.ToList();
+
+            var room = this._context.Rooms.SingleOrDefault(r => r.RoomNumber == roomNumber && r.IsAvailable == true);
+
+            if (room == null)
+                return null;
+
+            return new RoomDto(room);
+        }
+
         public RoomDto GetRoom(int id)
         {
             var room = this._context.Rooms.Find(id);

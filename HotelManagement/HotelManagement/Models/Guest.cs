@@ -14,6 +14,7 @@ namespace HotelManagement.Models
         public int Id { get; set; }
         public int CMND { get; set; }
         public string Name { get; set; }
+        public bool Sex { get; set; }
         public string Address { get; set; }
         public int GuestCategoryId { get; set; }
 

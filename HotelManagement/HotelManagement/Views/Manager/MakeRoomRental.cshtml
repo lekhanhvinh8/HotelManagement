@@ -10,21 +10,30 @@
     <meta name="viewport" content="width=device-width" />
     <title>MakeRoomRentel</title>
 
-    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/Manager.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 </head>
 <body>
     <div class="container">
-        <div>
-            <div>
-                <label for="searchRoomName">Search by room number</label>
-                <input id="search-by-roomNumber" type="text" class="form-control" style="width: 30%;" />
+        <div class="form-inline">
+            <div class="active-cyan-3 active-cyan-4 mb-4">
+                <input id="search-by-roomNumber" type="text" class="form-control" placeholder="Search" style="width:30%;" />
+
+                <button id="btn-search" class="btn" type="button">
+                    <i class="fa fa-search"></i>
+                </button>
             </div>
         </div>
-        <div>
+
+        <br />
+        <div class="well">
             <div>
-                <select id="select-room-category" class="form-control" style="width: 30%;">
+                <label for="select-room-category">Select Room Category</label>
+                <select id="select-room-category" class="form-control" name="select-room-category" style="width: 30%;">
                 </select>
             </div>
+            <br />
             <div>
                 <table id="table-available-rooms" class="table table-bordered">
                     <thead>
@@ -49,18 +58,21 @@
                             <label for="endDatePicker" class="control-label">End Date</label>
                             <input type="text" name="endDatePicker" class="form-control" />
                         </div>
-                        <div class="form-group">
+                        <div class="form-group table-guests-area">
+                            <span name="error-message" class="error"></span>
                             <table name="tableGuests" class="table table-bordered">
                                 <colgroup>
-                                    <col span="1" style="width: 20%;">
-                                    <col span="1" style="width: 20%;">
-                                    <col span="1" style="width: 30%;">
+                                    <col span="1" style="width: 15%;">
+                                    <col span="1" style="width: 17%;">
+                                    <col span="1" style="width: 15%;">
+                                    <col span="1" style="width: 23%;">
                                     <col span="1" style="width: 30%;">
                                 </colgroup>
                                 <thead>
                                     <tr>
                                         <td>CMND</td>
                                         <td>Name</td>
+                                        <td>Sex</td>
                                         <td>Guest's Category</td>
                                         <td>Address</td>
                                     </tr>
@@ -73,7 +85,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <script src="~/Scripts/jquery-3.4.1.js"></script>
@@ -81,7 +92,7 @@
     <script src="~/Scripts/bootstrap.js"></script>
     <script src="~/Scripts/bootbox.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-
+    <script src="~/Scripts/jquery.validate.js"></script>
 
     <script>
         $(document).ready(function () {
@@ -100,22 +111,129 @@
 
             ReloadTableRooms();
 
+            $("#btn-search").on("click", function () {
+                var roomNumber = $("#search-by-roomNumber").val();
+
+                if (roomNumber.trim() == '') {
+                    ReloadTableRooms();
+                    return;
+                }
+
+                $.ajax({
+                    url: "/api/Rooms/GetAvailableRoom?roomNumber=" + roomNumber,
+                    method: "get",
+                    success: function (response) {
+                        if (response === null)
+                            bootbox.alert("Room not found");
+                        else {
+                            $("#select-room-category option[data=" + response.roomCategoryID + "]").prop('selected', true);
+
+                            $("#table-available-rooms tbody tr").remove();
+
+                            var markup = "<tr data=" + response.id + ">"
+                                + "<td>" + response.id + "</td>"
+                                + "<td>" + response.roomNumber + "</td>"
+                                + "<td data=" + response.roomCategoryID + ">" + response.roomCategoryName + "</td>"
+                                + "<td><button class='btn btn-success js-make-rental-slip' data-room-category=" + response.roomCategoryID + " data-room-id=" + response.id + ">Make rental slip</button></td>";
+
+                            $("#table-available-rooms").append(markup);
+                        }
+                    },
+                });
+            });
+
             $("#select-room-category").on("change", function () {
                 ReloadTableRooms();
             });
 
             $("#table-available-rooms tbody").on("click", ".js-make-rental-slip", function () {
                 var button = $(this);
+                var row = button.parents("tr");
+
+                var roomNumber = row.find("td:eq(1)").text();
+                var roomCategory = row.find("td:eq(2)").text();
 
                 var dialogBootbox = bootbox.dialog({
                     message: $("#room-rental-slip-dialog").html(),
-                    title: "Make room rental slip",
+                    title: roomNumber + ": " + roomCategory,
+                    size: "large",
                     buttons: [
                         {
-                            label: "Save",
-                            className: "btn btn-primary",
+                            label: "Cancel",
+                            className: "btn btn-danger",
                             callback: function () {
+                            },
+                        },
+                        {
+                            label: "Save",
+                            className: "btn btn-success",
+                            callback: function () {
+                                //validate start date, end date.
+                                var form = dialogBootbox.find("#form-room-rental-slip");
 
+                                form.validate({
+                                    rules: {
+                                        startDatePicker: {
+                                            required: true,
+                                            checkIfGreaterThanNow: true,
+                                        },
+                                        endDatePicker: {
+                                            required: true,
+                                            endDateMustGreaterThanStartDate: dialogBootbox.find("#form-room-rental-slip input[name='startDatePicker']"),
+                                        }
+                                    },
+
+                                });
+
+                                var isValidDialog = true;
+
+                                if (form.valid() == false)
+                                    isValidDialog = false;
+
+                                var guestDtos = [];
+
+                                var tableGuests = dialogBootbox.find("#form-room-rental-slip table[name='tableGuests'] tbody tr");
+                                tableGuests.each(function () {
+                                    if ($(this).find("input[name='CMND']").val().trim() != '') {
+                                        guestDtos.push({
+                                            cmnd: $(this).find("input[name='CMND']").val(),
+                                            name: $(this).find("input[name='name']").val(),
+                                            address: $(this).find("input[name='address']").val(),
+                                            sex: $(this).find(".select-guest-sex option:selected").attr("value"),
+                                            guestCategoryId: $(this).find(".select-guest-category option:selected").attr("data"),
+                                        });
+                                    }
+                                });
+
+                                if (guestDtos.length == 0) {
+                                    isValidDialog = false;
+
+                                    dialogBootbox.find(".table-guests-area").addClass("error-area");
+
+                                    dialogBootbox.find(".table-guests-area span[name='error-message']").text("Need at least 1 guest");
+                                } else {
+                                    dialogBootbox.find(".table-guests-area").removeClass("error-area");
+                                    dialogBootbox.find(".table-guests-area span[name='error-message']").text("");
+                                }
+                                
+
+                                if (!isValidDialog)
+                                    return false;
+
+                                $.ajax({
+                                    url: "/api/RoomRentalSlips",
+                                    method: "post",
+                                    data: {
+                                        roomId: button.attr("data-room-id"),
+                                        startDate: dialogBootbox.find("#form-room-rental-slip input[name='startDatePicker']").val(),
+                                        endDate: dialogBootbox.find("#form-room-rental-slip input[name='endDatePicker']").val(),
+                                        guests: guestDtos,
+                                    },
+                                    success: function (response) {
+                                        ReloadTableRooms();
+                                    },
+                                });
+                                
                             }
                         },
                     ],
@@ -136,6 +254,7 @@
 
                 startDate.val(dateStr1);
 
+                startDate.datepicker({ dateFormat: "yy-mm-dd" });
                 endDate.datepicker({ dateFormat: "yy-mm-dd" });
 
                 //Set up guest form
@@ -147,9 +266,10 @@
                     success: function (response) {
                         for (var i = 0; i < response.maxNumberOfGuest; i++) {
                             var markup = "<tr>"
-                                + "<td><input type='text' class='form-control'/></td>"
-                                + "<td><input type='text' class='form-control'/></td>"
-                                + "<td><select class='form-control'>";
+                                + "<td><input type='text' class='form-control' name='CMND'/></td>"
+                                + "<td><input type='text' class='form-control' name='name'/></td>"
+                                + "<td><select class='form-control select-guest-sex'><option value=false>Male</option><option value=true>Female</option></select></td>"
+                                + "<td><select class='form-control select-guest-category'>";
 
                             $.ajax({
                                 url: "/api/GuestCategories",
@@ -157,13 +277,13 @@
                                 async: false,
                                 success: function (response) {
                                     for (var i = 0; i < response.length; i++) {
-                                        markup += "<option data=" + response.id + ">" + response[i].name + "</option>";
+                                        markup += "<option data=" + response[i].id + ">" + response[i].name + "</option>";
                                     }
                                 }
                             });
 
                             markup += "</select></td>"
-                                + "<td><input type='text' class='form-control'/></td>"
+                                + "<td><input type='text' class='form-control' name='address'/></td>"
                                 + "</tr>";
                             tableGuest.append(markup);
                         }
@@ -183,7 +303,7 @@
                                 + "<td>" + response[i].id + "</td>"
                                 + "<td>" + response[i].roomNumber + "</td>"
                                 + "<td data=" + response[i].roomCategoryID + ">" + response[i].roomCategoryName + "</td>"
-                                + "<td><button class='btn btn-success js-make-rental-slip' data-room-category=" + response[i].roomCategoryID + ">Make rental slip</button></td>";
+                                + "<td><button class='btn btn-success js-make-rental-slip' data-room-category=" + response[i].roomCategoryID + " data-room-id=" + response[i].id + ">Make rental slip</button></td>";
 
 
                             $("#table-available-rooms").append(markup);
@@ -192,6 +312,56 @@
                 })
             }
         });
+
+        jQuery.validator.addMethod("checkIfGreaterThanNow", function (value) {
+            var d = new Date();
+
+            var date = d.getDate();
+            var month = d.getMonth() + 1; // Since getMonth() returns month from 0-11 not 1-12
+            var year = d.getFullYear();
+
+            var monthDayYear = value.split('/');
+
+            if (monthDayYear[2] < year)
+                return false;
+
+            if (monthDayYear[2] == year) {
+                if (monthDayYear[0] < month)
+                    return false;
+
+                if (monthDayYear[0] == month) {
+                    if (monthDayYear[1] < date)
+                        return false;
+                }
+            }
+
+            return true;
+
+        }, "Invalid date, not set date in the past");
+
+        jQuery.validator.addMethod("endDateMustGreaterThanStartDate", function (value, element, param) {
+            
+            var monthDayYearEnd = value.split('/');
+            var monthDayYearStart = param.val().split('/');
+
+            if (monthDayYearEnd[2] < monthDayYearStart[2])
+                return false;
+
+            if (monthDayYearEnd[2] == monthDayYearStart[2]) {
+                if (monthDayYearEnd[0] < monthDayYearStart[0])
+                    return false;
+
+                if (monthDayYearEnd[0] == monthDayYearStart[0]) {
+                    if (monthDayYearEnd[1] < monthDayYearStart[1])
+                        return false;
+                }
+                    
+            }
+
+            return true;
+
+        }, "Invalid date, the end date must be after the start date");
+
     </script>
 </body>
 </html>

@@ -151,6 +151,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\api\GuestCategoriesController.cs" />
     <Compile Include="Controllers\api\RoomCategoriesController.cs" />
+    <Compile Include="Controllers\api\RoomRentalSlipsController.cs" />
     <Compile Include="Controllers\api\RoomsController.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
     <Compile Include="Global.asax.cs">
@@ -176,11 +177,18 @@
     <Compile Include="Migrations\202101041623392_removeGuestCMNDUnique.designer.cs">
       <DependentUpon>202101041623392_removeGuestCMNDUnique.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202101050508043_AddSexPropertyToGuest.cs" />
+    <Compile Include="Migrations\202101050508043_AddSexPropertyToGuest.designer.cs">
+      <DependentUpon>202101050508043_AddSexPropertyToGuest.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\Consts\Sex.cs" />
     <Compile Include="Models\Dtos\GuestCategoryDto.cs" />
+    <Compile Include="Models\Dtos\GuestDto.cs" />
     <Compile Include="Models\Dtos\RoomCategoryDto.cs" />
     <Compile Include="Models\Dtos\RoomDto.cs" />
+    <Compile Include="Models\Dtos\RoomRentalSlipDto.cs" />
     <Compile Include="Models\Guest.cs" />
     <Compile Include="Models\GuestCategory.cs" />
     <Compile Include="Models\HotelManagementDbContext.cs" />
@@ -355,6 +363,7 @@
     <Content Include="Content\DataTables\images\sort_desc.png" />
     <Content Include="Content\DataTables\images\sort_desc_disabled.png" />
     <Content Include="Content\DataTables\swf\flashExport.swf" />
+    <Content Include="Content\Manager.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\sb-admin-2.min.css" />
     <Content Include="favicon.ico" />
@@ -516,6 +525,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202101041623392_removeGuestCMNDUnique.resx">
       <DependentUpon>202101041623392_removeGuestCMNDUnique.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101050508043_AddSexPropertyToGuest.resx">
+      <DependentUpon>202101050508043_AddSexPropertyToGuest.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
