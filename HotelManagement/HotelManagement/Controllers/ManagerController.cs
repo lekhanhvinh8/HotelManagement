@@ -45,24 +45,50 @@ namespace HotelManagement.Controllers
             {
                 return Content("false");
             }
-            return Content("AddRoomRentalSlip?room=" + roomNum.Id.ToString());
+            return Content("CreateInvoice?room=" + roomNum.Id.ToString());
         }
 
-        public ActionResult AddRoomRentalSlip(int room)
-        {
-            var roomRentalSlip = (from i in _context.RoomRentalSlips
-                                  where i.RoomId == room
-                                  orderby i.Id
-                                  select i).SingleOrDefault();
-            var listRoomRentalSlip = new List<RoomRentalSlip>();
-            listRoomRentalSlip.Add(roomRentalSlip);
-            return View(listRoomRentalSlip);
-        }
+        //public ActionResult AddRoomRentalSlip(int room)
+        //{
+        //    var roomRentalSlip = (from i in _context.RoomRentalSlips
+        //                          where i.RoomId == room
+        //                          orderby i.Id
+        //                          select i).SingleOrDefault();
+        //    var listRoomRentalSlip = new List<RoomRentalSlip>();
+        //    listRoomRentalSlip.Add(roomRentalSlip);
+        //    return View(listRoomRentalSlip);
+        //}
 
-        public ActionResult CreateInvoice(RoomRentalSlip roomRentalSlip)
+        
+        public ActionResult RawInvoice()
         {
             IEnumerable<RoomRentalSlip> listRoomRentalSlip = (from i in _context.RoomRentalSlips
-                                                              where i.Id == roomRentalSlip.Id
+                                                              where i.Status == true
+                                                              orderby i.Id
+                                                              select i).ToPagedList(1, 5);
+            return View("CreateInvoice", listRoomRentalSlip);
+        }
+
+        
+        public ActionResult CreateInvoice(int room)
+        {
+            var roomRental = (from i in _context.RoomRentalSlips
+                              where i.RoomId == room
+                              where i.Status == false
+                              select i).SingleOrDefault();
+            if (roomRental == null)
+            {
+                ModelState.AddModelError("", "Error");
+            }
+            else
+            {
+                roomRental.Status = true;
+                _context.RoomRentalSlips.AddOrUpdate(roomRental);
+                _context.SaveChanges();
+            }
+           
+            IEnumerable<RoomRentalSlip> listRoomRentalSlip = (from i in _context.RoomRentalSlips
+                                                              where i.Status == true
                                                               orderby i.Id
                                                               select i).ToPagedList(1, 5);
             return View(listRoomRentalSlip);
@@ -102,6 +128,22 @@ namespace HotelManagement.Controllers
 
                 return Content("false");
             }
+        }
+
+        [HttpPost]
+        public ActionResult RemoveLine(int id)
+        {
+            var roomRental = (from i in _context.RoomRentalSlips
+                              where i.Id == id
+                              select i).SingleOrDefault();
+            if (roomRental != null)
+            {
+                roomRental.Status = false;
+                _context.RoomRentalSlips.AddOrUpdate(roomRental);
+                _context.SaveChanges();
+                return Content("/Manager/RawInvoice");
+            }     
+            return Content("false");
         }
     }
 }

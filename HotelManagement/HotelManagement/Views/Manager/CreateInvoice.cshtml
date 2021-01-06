@@ -7,7 +7,6 @@
 <div class="container">
 	<h2 class="h2">Invoice Infomation</h2>
 	<div>
-		<button class="btn btn-primary" data-toggle="modal" data-target="#getInfo">Guest Information</button>
 		<button class="btn btn-primary" data-toggle="modal" data-target="#searchRoom">Add Room</button>
 	</div>
 	<div>
@@ -24,12 +23,46 @@
 			<tbody>
 				@foreach (var item in Model)
 				{
+					var coefficient = 1.0;
+					var rentalDate = (item.EndDate - item.StartDate).TotalDays.ToString();
+					var surcharge = 0.0;
+					var hasForeign = false;
+					foreach (var i in item.Guests)
+					{
+						if (i.GuestCategory.Coefficient > 1.0)
+						{
+							hasForeign = true;
+							coefficient = i.GuestCategory.Coefficient - 1.0;
+						}
+					}
+					if (item.Guests.Count >= item.Room.RoomCategory.NumStartSurcharge)
+					{
+						var sur = item.Room.RoomCategory.SurchargeRate;
+						surcharge = (item.Room.RoomCategory.UnitPrice * sur) + (item.Room.RoomCategory.UnitPrice * coefficient);
+					}
+					else
+					{
+						if (hasForeign == false)
+						{
+							surcharge = 0;
+						}
+						else
+						{
+							surcharge = item.Room.RoomCategory.UnitPrice * coefficient;
+						}
+					}
+					int ren;
+					ren = Int32.Parse(rentalDate);
+					var lineTotal = (item.Room.RoomCategory.UnitPrice + surcharge) * ren;
 					<tr>
 						<td>@item.Room.RoomNumber</td>
-						<td></td>
+						<td>@rentalDate</td>
 						<td>@item.Room.RoomCategory.UnitPrice</td>
-						<td></td>
-						<td></td>
+						<td>@surcharge</td>
+						<td>@lineTotal</td>
+						<td>
+							<a href="#" data-toggle="modal" data-target="#cancelLine" data-id="@item.Id" class="cancel">Remove</a>
+						</td>
 					</tr>
 				}
 			</tbody>
@@ -37,6 +70,9 @@
 	</div>
 	<div style="border-top: 1px groove;">
 		@Html.PagedListPager(Model, Page => Url.Action("CreateInvoice", new { Page }))
+	</div>
+	<div style="float: right">
+		<button class="btn btn-primary" data-toggle="modal" data-target="#getInfo">Create Invoice</button>
 	</div>
 </div>
 <!--Guest Info-->
@@ -67,6 +103,10 @@
 					<label>Gender</label>
 					<input id="maleRBtn" type="radio" name="gender" value="false"> Male
 					<input id="femaleRBtn" type="radio" name="gender" value="true"> Female
+				</div>
+				<div class="form-group">
+					<label>Guest Category</label>
+					
 				</div>
 				<div style="width: 21%; margin: auto;">
 					<a href="#" class="btn btn-block" style="color:white; background-color:cornflowerblue" id="commitInfo">Save</a>
@@ -99,6 +139,27 @@
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--Remove a line-->
+<div class="modal fade" id="cancelLine" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="exampleModalLabel">Remove</h4>
+				<button class="close" id="closePass" type="button" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				Are you sure you want to remove this line
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-secondary" type="button" data-dismiss="modal">No</button>
+				<a class="btn btn-primary" href="#" id="confirmRemove">Yes</a>
 			</div>
 		</div>
 	</div>
@@ -148,6 +209,30 @@
 						alert('Room does not exist or has no tenants')
 					}
 					else {
+						setTimeout(function () {
+							window.location.href = '' + msg + '';
+						}, 10);
+					}
+				}
+			});
+		});
+		var id;
+		$('.cancel').click(function (e) {
+			e.preventDefault();
+			id = $(this).data('id');
+		});
+		$('#confirmRemove').click(function (e) {
+			e.preventDefault();
+			$.ajax({
+				url: '/Manager/RemoveLine',
+				type: 'POST',
+				data: { id: id },
+				success: function (msg) {
+					if (msg == 'false') {
+						alert('Error');
+					}
+					else {
+						alert('Success')
 						setTimeout(function () {
 							window.location.href = '' + msg + '';
 						}, 10);

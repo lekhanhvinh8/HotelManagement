@@ -276,4 +276,5 @@ D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManag
 D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\obj\Debug\HotelManagement.csproj.CopyComplete
 D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\obj\Debug\HotelManagement.dll
 D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\obj\Debug\HotelManagement.pdb
+D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\obj\Debug\HotelManagement.Migrations.AddStatusToRoomRentalSlip.resources
 D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\obj\Debug\HotelManagement.csprojAssemblyReference.cache
