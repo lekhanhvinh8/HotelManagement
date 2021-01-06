@@ -162,6 +162,10 @@
     <Compile Include="Migrations\202101060545404_InitialModel.designer.cs">
       <DependentUpon>202101060545404_InitialModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202101060958412_AddStatusToRoomRentalSlip.cs" />
+    <Compile Include="Migrations\202101060958412_AddStatusToRoomRentalSlip.designer.cs">
+      <DependentUpon>202101060958412_AddStatusToRoomRentalSlip.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Consts\Sex.cs" />
@@ -472,6 +476,8 @@
     <Content Include="Views\Manager\MakeRoomRental.cshtml" />
     <Content Include="Views\Manager\RoomRentalSlip.cshtml" />
     <Content Include="Views\Manager\InvoiceManagement.cshtml" />
+    <Content Include="Views\Manager\CreateInvoice.cshtml" />
+    <Content Include="Views\Manager\AddRoomRentalSlip.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -496,6 +502,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202101060545404_InitialModel.resx">
       <DependentUpon>202101060545404_InitialModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101060958412_AddStatusToRoomRentalSlip.resx">
+      <DependentUpon>202101060958412_AddStatusToRoomRentalSlip.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

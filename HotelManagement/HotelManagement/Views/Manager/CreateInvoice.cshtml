@@ -1,0 +1,244 @@
+﻿@model PagedList.IPagedList<HotelManagement.Models.RoomRentalSlip>
+@using PagedList.Mvc;
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+	<h2 class="h2">Invoice Infomation</h2>
+	<div>
+		<button class="btn btn-primary" data-toggle="modal" data-target="#searchRoom">Add Room</button>
+	</div>
+	<div>
+		<table class="table">
+			<thead>
+				<tr>
+					<td>Room</td>
+					<td>Rental Date</td>
+					<td>Unit Cost</td>
+					<td>Surcharge</td>
+					<td>Line Total</td>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model)
+				{
+					var coefficient = 1.0;
+					var rentalDate = (item.EndDate - item.StartDate).TotalDays.ToString();
+					var surcharge = 0.0;
+					var hasForeign = false;
+					foreach (var i in item.Guests)
+					{
+						if (i.GuestCategory.Coefficient > 1.0)
+						{
+							hasForeign = true;
+							coefficient = i.GuestCategory.Coefficient - 1.0;
+						}
+					}
+					if (item.Guests.Count >= item.Room.RoomCategory.NumStartSurcharge)
+					{
+						var sur = item.Room.RoomCategory.SurchargeRate;
+						surcharge = (item.Room.RoomCategory.UnitPrice * sur) + (item.Room.RoomCategory.UnitPrice * coefficient);
+					}
+					else
+					{
+						if (hasForeign == false)
+						{
+							surcharge = 0;
+						}
+						else
+						{
+							surcharge = item.Room.RoomCategory.UnitPrice * coefficient;
+						}
+					}
+					int ren;
+					ren = Int32.Parse(rentalDate);
+					var lineTotal = (item.Room.RoomCategory.UnitPrice + surcharge) * ren;
+					<tr>
+						<td>@item.Room.RoomNumber</td>
+						<td>@rentalDate</td>
+						<td>@item.Room.RoomCategory.UnitPrice</td>
+						<td>@surcharge</td>
+						<td>@lineTotal</td>
+						<td>
+							<a href="#" data-toggle="modal" data-target="#cancelLine" data-id="@item.Id" class="cancel">Remove</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+	<div style="border-top: 1px groove;">
+		@Html.PagedListPager(Model, Page => Url.Action("CreateInvoice", new { Page }))
+	</div>
+	<div style="float: right">
+		<button class="btn btn-primary" data-toggle="modal" data-target="#getInfo">Create Invoice</button>
+	</div>
+</div>
+<!--Guest Info-->
+<div class="modal fade" id="getInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content" style="width: 54%; margin: auto;">
+			<div class="modal-header">
+				<h4 class="modal-title" id="exampleModalLabel">Guest Information</h4>
+				<button class="close" id="closeInfo" type="button" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div id="notifyInfo" class="notify"></div>
+				<div class="form-group">
+					<label>Identity Card</label>
+					<input type="text" class="form-control form-control-user" id="addIC" placeholder="Enter Identity Card">
+				</div>
+				<div class="form-group">
+					<label>Name</label>
+					<input type="text" class="form-control form-control-user" id="addName" placeholder="Enter Name">
+				</div>
+				<div class="form-group">
+					<label>Address</label>
+					<input type="text" class="form-control form-control-user" id="addAddress" placeholder="Enter Address">
+				</div>
+				<div class="form-group">
+					<label>Gender</label>
+					<input id="maleRBtn" type="radio" name="gender" value="false"> Male
+					<input id="femaleRBtn" type="radio" name="gender" value="true"> Female
+				</div>
+				<div class="form-group">
+					<label>Guest Category</label>
+					
+				</div>
+				<div style="width: 21%; margin: auto;">
+					<a href="#" class="btn btn-block" style="color:white; background-color:cornflowerblue" id="commitInfo">Save</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--Add new room rental slip by room number-->
+<div class="modal fade" id="searchRoom" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content" style="width: 50%; margin: auto;">
+			<div class="modal-header">
+				<h4 class="modal-title" id="exampleModalLabel">Search for room</h4>
+				<button class="close" id="closePass" type="button" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div id="notify" class="notify"></div>
+				<div class="form-group">
+					<label>Type room number</label>
+					<div class="form-group row">
+						<div class="col-sm-6 mb-3 mb-sm-0">
+							<input type="text" class="form-control" id="roomNumber" name="roomNumber">
+						</div>
+						<div class="col-sm-6">
+							<a href="#" class="btn btn-block " style="color:white; background-color:cornflowerblue; width: 75px;" id="check">Search</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--Remove a line-->
+<div class="modal fade" id="cancelLine" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="exampleModalLabel">Remove</h4>
+				<button class="close" id="closePass" type="button" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				Are you sure you want to remove this line
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-secondary" type="button" data-dismiss="modal">No</button>
+				<a class="btn btn-primary" href="#" id="confirmRemove">Yes</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+
+<script>
+	$(document).ready(function () {
+		$('#commitInfo').off('click').on('click', function (e) {
+			e.preventDefault();
+			var identityCard = $('#addIC').val();
+			var name = $('#addName').val();
+			var address = $('#addAddress').val();
+			if ($('#maleRBtn').checked == true) {
+				var gender = $('#maleRBtn').val();
+			}
+			else {
+				var gender = $('#femaleRBtn').val();
+			}
+			$.ajax({
+				url: '/Manager/InvoiceOfGuest',
+				type: 'POST',
+				data: { icOfGuest: identityCard, nameOfGuest: name, addressOfGuest: address, genderOfGuest: gender },
+				success: function (msg) {
+					if (msg == 'true') {
+						alert('Success')
+						var identityCard = $('#addIC').val();
+						var name = $('#addName').val();
+						var address = $('#addAddress').val();
+					}
+					else {
+						alert('Error');
+					}
+				}
+			});
+		});
+		$('#check').click(function (e) {
+			e.preventDefault();
+			var roomNum = $('#roomNumber').val();
+			$.ajax({
+				url: '/Manager/CheckRoom',
+				type: 'Get',
+				data: { room: roomNum },
+				success: function (msg) {
+					if (msg == 'false') {
+						alert('Room does not exist or has no tenants')
+					}
+					else {
+						setTimeout(function () {
+							window.location.href = '' + msg + '';
+						}, 10);
+					}
+				}
+			});
+		});
+		var id;
+		$('.cancel').click(function (e) {
+			e.preventDefault();
+			id = $(this).data('id');
+		});
+		$('#confirmRemove').click(function (e) {
+			e.preventDefault();
+			$.ajax({
+				url: '/Manager/RemoveLine',
+				type: 'POST',
+				data: { id: id },
+				success: function (msg) {
+					if (msg == 'false') {
+						alert('Error');
+					}
+					else {
+						alert('Success')
+						setTimeout(function () {
+							window.location.href = '' + msg + '';
+						}, 10);
+					}
+				}
+			});
+		});
+	});
+</script>

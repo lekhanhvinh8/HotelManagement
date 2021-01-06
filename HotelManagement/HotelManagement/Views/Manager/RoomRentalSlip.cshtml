@@ -22,13 +22,13 @@
 				@foreach (var item in Model)
 				{
 					<tr>
-						<td> @item.Id</td >
-						<td> @item.Room.RoomNumber</td >
-						<td> @item.Guests.Count</td >
-						<td> @item.StartDate</td >
-						<td> @item.EndDate</td >
+						<td> @item.Id</td>
+						<td> @item.Room.RoomNumber</td>
+						<td> @item.Guests.Count</td>
+						<td> @item.StartDate</td>
+						<td> @item.EndDate</td>
 						<td>
-							<a href="#" data-toggle="modal" data-target="#details">Detail </a >
+							<a href="#" data-toggle="modal" data-target="#details">Detail </a>
 						</td>
 					</tr>
 				}
@@ -39,7 +39,7 @@
 		@Html.PagedListPager(Model, Page => Url.Action("RoomRentalSlip", new { Page }))
 	</div>
 	<div style="float:right; margin: 2rem 0 2rem; padding-top:1rem;	">
-		<button class="btn btn-primary"> Create invoice </button>
+		<button class="btn btn-primary" data-toggle="modal" data-target="#searchRoom">Create invoice </button>
 	</div>
 </div>
 
@@ -50,7 +50,7 @@
 			<div class="modal-header">
 				<h4 class="modal-title" id="exampleModalLabel">Room Rental Slip Details</h4>
 				<button class="close" id="closeInfo" type="button" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">×</span >
+					<span aria-hidden="true">×</span>
 				</button>
 			</div>
 			<div class="modal-body">
@@ -91,3 +91,57 @@
 		</div>
 	</div>
 </div>
+
+<!--Modal popup for search room-->
+<div class="modal fade" id="searchRoom" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content" style="width: 50%; margin: auto;">
+			<div class="modal-header">
+				<h4 class="modal-title" id="exampleModalLabel">Search for room</h4>
+				<button class="close" id="closePass" type="button" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div id="notify" class="notify"></div>
+				<div class="form-group">
+					<label>Type room number</label>
+					<div class="form-group row">
+						<div class="col-sm-6 mb-3 mb-sm-0">
+							<input type="text" class="form-control" id="roomNumber" name="roomNumber">
+						</div>
+						<div class="col-sm-6">
+							<a href="#" class="btn btn-block " style="color:white; background-color:cornflowerblue; width: 75px;" id="search">Search</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+
+<script>
+	$(document).ready(function () {
+		$('#search').click(function (e) {
+			e.preventDefault();
+			var roomNum = $('#roomNumber').val();
+			$.ajax({
+				url: 'CheckRoom',
+				type: 'Get',
+				data: { room: roomNum },
+				success: function (msg) {
+					if (msg == 'false') {
+						alert('Room does not exist or has no tenants')
+					}
+					else {
+						setTimeout(function () {
+							window.location.href = '' + msg + '';
+						}, 10);
+					}
+				}
+			})
+		})
+	});
+</script>
