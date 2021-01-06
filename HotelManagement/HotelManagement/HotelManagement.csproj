@@ -150,6 +150,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\api\GuestCategoriesController.cs" />
+    <Compile Include="Controllers\api\InvoicesController.cs" />
     <Compile Include="Controllers\api\RoomCategoriesController.cs" />
     <Compile Include="Controllers\api\RoomRentalSlipsController.cs" />
     <Compile Include="Controllers\api\RoomsController.cs" />
@@ -166,6 +167,7 @@
     <Compile Include="Models\Consts\Sex.cs" />
     <Compile Include="Models\Dtos\GuestCategoryDto.cs" />
     <Compile Include="Models\Dtos\GuestDto.cs" />
+    <Compile Include="Models\Dtos\InvoiceDto.cs" />
     <Compile Include="Models\Dtos\RoomCategoryDto.cs" />
     <Compile Include="Models\Dtos\RoomDto.cs" />
     <Compile Include="Models\Dtos\RoomRentalSlipDto.cs" />
@@ -469,6 +471,7 @@
     <Content Include="Views\Admin\RevenueAreaChart.cshtml" />
     <Content Include="Views\Manager\MakeRoomRental.cshtml" />
     <Content Include="Views\Manager\RoomRentalSlip.cshtml" />
+    <Content Include="Views\Manager\InvoiceManagement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

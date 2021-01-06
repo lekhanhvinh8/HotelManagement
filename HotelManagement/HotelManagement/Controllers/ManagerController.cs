@@ -29,6 +29,9 @@ namespace HotelManagement.Controllers
             return View(listRoomRentalSlip);
         }
 
-       
+        public ActionResult InvoiceManagement()
+        {
+            return View();
+        }
     }
 }

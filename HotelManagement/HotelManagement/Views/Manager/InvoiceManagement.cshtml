@@ -1,0 +1,196 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Invoice Management</title>
+
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/Manager.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/DataTables/css/dataTables.bootstrap.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+</head>
+<body>
+    <div class="container">
+        <div class="well" id="search-by-invoiceID">
+            <div class="form-inline">
+                <input type="text" class="form-control" name="searchById" placeholder="Search" style="width:30%;" />
+
+                <button id="btn-search" class="btn btn-success" type="button">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+        <div class="well" id="filter-invoice">
+            <div class="form-group">
+                <div class="form-inline" name="search-by-date">
+                    <label for="startDate" class="control-label">Start Date: </label>
+                    <input type="text" class="form-control" name="startDate" style="width:15%; margin-right:30px;" />
+
+                    <label for="endDate" class="control-label">End Date: </label>
+                    <input type="text" class="form-control" name="endDate" style="width:15%; margin-right:50px;" />
+
+
+                    <label for="searchByRoomCategory" class="control-label">Room category</label>
+                    <select class="form-control" name="searchByRoomCategory" style="width:10%; margin-right:15px;"></select>
+
+                    <label for="searchByRoom" class="control-label">Room</label>
+                    <select class="form-control" name="searchByRoom" style="width:10%; margin-right:15px;"></select>
+
+                    <button id="btn-filter" class="btn btn-success" type="button">
+                        <i class="fa fa-filter"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="well">
+            <table id="table-invoices" class="table table-bordered">
+                <thead>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/bootbox.js"></script>
+    <script src="~/Scripts/DataTables/jquery.dataTables.js"></script>
+    <script src="~/Scripts/DataTables/dataTables.bootstrap.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+
+            ReloadRoomCategorySelection();
+            ReloadRoomSelection();
+            $("#filter-invoice input[name='startDate']").datepicker({ dateFormat: "yy-mm-dd" });
+            $("#filter-invoice input[name='endDate']").datepicker({ dateFormat: "yy-mm-dd" });
+
+            var dataTableInvoice = $("#table-invoices").DataTable({
+                ajax: {
+                    url: "/api/Invoices/GetSome?startDate=" + $("#filter-invoice input[name='startDate']").val()
+                                                            + "&endDate=" + $("#filter-invoice input[name='endDate']").val()
+                                                            + "&roomCategoryID=" + $("#filter-invoice select[name='searchByRoomCategory'] option:selected").attr("value")
+                                                            + "&roomID=" + $("#filter-invoice select[name='searchByRoom'] option:selected").attr("value"),
+                    dataSrc: "",
+                },
+                columns: [
+                    {
+                        title: "Invoice ID",
+                        data: "id",
+                        render: function (data) {
+                            return data;
+                        },
+                    },
+                    {
+                        title: "Payer",
+                        data: "guestName",
+                        render: function (data) {
+                            return data;
+                        },
+                    },
+                    {
+                        title: "Date of payment",
+                        data: "dateOfInvoice",
+                        render: function (data) {
+                            return data;
+                        },
+                    },
+                    {
+                        title: "Total cost",
+                        data: "totalCost",
+                        render: function (data) {
+                            return data;
+                        },
+                    },
+                    {
+                        title: "Detail",
+                        data: "id",
+                        render: function (data) {
+                            return "<button class='btn-link' data=" + data + ">Detail</button>";
+                        },
+                    },
+                    {
+                        title: "Delete",
+                        data: "id",
+                        render: function (data) {
+                            return "<button class='btn btn-danger' data=" + data + "><i class='fa fa-minus'></i></button>";
+                        },
+                    },
+                ],
+                searching: false,
+                info: false,
+                ordering: false,
+            });
+
+            //events
+            $("#filter-invoice select[name='searchByRoomCategory']").on("change", function () {
+                ReloadRoomSelection();
+            });
+
+            $("#btn-search").on("click", function () {
+                var url = "/api/Invoices/GetSome?id=" + $("#search-by-invoiceID input[name='searchById']").val();
+
+                dataTableInvoice.ajax.url(url).load();
+            });
+
+            $("#btn-filter").on("click", function () {
+                var url = "/api/Invoices/GetSome?startDate=" + $("#filter-invoice input[name='startDate']").val()
+                    + "&endDate=" + $("#filter-invoice input[name='endDate']").val()
+                    + "&roomCategoryID=" + $("#filter-invoice select[name='searchByRoomCategory'] option:selected").attr("value")
+                    + "&roomID=" + $("#filter-invoice select[name='searchByRoom'] option:selected").attr("value");
+
+                dataTableInvoice.ajax.url(url).load();
+            });
+
+
+            function ReloadRoomCategorySelection() {
+                var selector = $("#filter-invoice select[name='searchByRoomCategory']");
+
+                selector.find("option").remove();
+
+                selector.append("<option value=-1>All</option>");
+                $.ajax({
+                    url: "/api/RoomCategories/GetAll",
+                    method: "get",
+                    success: function (response) {
+                        for (var i = 0; i < response.length; i++) {
+                            selector.append("<option value=" + response[i].id + ">" + response[i].name + "</option>");
+                        }
+                    },
+                });
+            }
+
+            function ReloadRoomSelection() {
+                var selector = $("#filter-invoice select[name='searchByRoom']");
+
+                selector.find("option").remove();
+
+                selector.append("<option value=-1>All</option>");
+                $.ajax({
+                    url: "/api/Rooms/GetSome?roomCategoryId=" + $("#filter-invoice select[name='searchByRoomCategory']").val(),
+                    method: "get",
+                    success: function (response) {
+                        for (var i = 0; i < response.length; i++) {
+                            selector.append("<option value=" + response[i].id + ">" + response[i].roomNumber + "</option>");
+                        }
+                    },
+                });
+            }
+        });
+    </script>
+</body>
+</html>

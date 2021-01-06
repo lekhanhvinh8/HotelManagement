@@ -413,7 +413,7 @@
             //Room management
             $("#room-room-category-id").on("change", function () {
                 dataTableRoom.ajax.url('/api/Rooms/GetSome?roomCategoryId=' + $("#room-room-category-id option:selected").attr("data")).load();
-                dataTableRoom.ajax.reload();
+                //dataTableRoom.ajax.reload();
             });
             
             $("#add-new-room").on("click", function () {

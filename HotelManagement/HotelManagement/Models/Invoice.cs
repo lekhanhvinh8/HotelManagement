@@ -5,6 +5,10 @@ namespace HotelManagement.Models
 
     public partial class Invoice
     {
+        public Invoice()
+        {
+
+        }
         public Invoice(List<RoomRentalSlip> roomRentalSlips)
         {
             var ticks = DateTime.Now.Ticks;
