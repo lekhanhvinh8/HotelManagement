@@ -105,8 +105,10 @@
 					<input id="femaleRBtn" type="radio" name="gender" value="true"> Female
 				</div>
 				<div class="form-group">
-					<label>Guest Category</label>
-					
+					<label for="selectGuestCategory" class="control-label">Guest Category</label>
+					<select class="form-control" id="select-guest-category" name="selectGuestCategory">
+
+					</select>
 				</div>
 				<div style="width: 21%; margin: auto;">
 					<a href="#" class="btn btn-block" style="color:white; background-color:cornflowerblue" id="commitInfo">Save</a>
@@ -169,6 +171,9 @@
 
 <script>
 	$(document).ready(function () {
+
+		ReloadGuestCategorySelector();
+
 		$('#commitInfo').off('click').on('click', function (e) {
 			e.preventDefault();
 			var identityCard = $('#addIC').val();
@@ -240,5 +245,22 @@
 				}
 			});
 		});
+
+		function ReloadGuestCategorySelector() {
+			$("#select-guest-category").find("option").remove();
+
+            $.ajax({
+                url: "/api/GuestCategories/GetAll",
+                method: "get",
+                success: function (response) {
+                    for (var i = 0; i < response.length; i++) {
+
+                        var markup = "<option value=" + response[i].id + ">" + response[i].name + "</option>"
+
+                        $("#select-guest-category").append(markup);
+                    }
+                },
+            });
+        }
 	});
 </script>
