@@ -27,5 +27,6 @@ namespace HotelManagement.Models
         public virtual Room Room { get; set; }
         public virtual ICollection<Guest> Guests { get; set; }
         public float? LineTotal { get; set; }
+        public bool Status { get; set; }
     }
 }

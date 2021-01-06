@@ -469,6 +469,8 @@
     <Content Include="Views\Admin\RevenueAreaChart.cshtml" />
     <Content Include="Views\Manager\MakeRoomRental.cshtml" />
     <Content Include="Views\Manager\RoomRentalSlip.cshtml" />
+    <Content Include="Views\Manager\CreateInvoice.cshtml" />
+    <Content Include="Views\Manager\AddRoomRentalSlip.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
