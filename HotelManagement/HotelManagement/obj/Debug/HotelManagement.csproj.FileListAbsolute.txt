@@ -176,14 +176,9 @@ D:\HK1_2020-2021\Software Engineering\Đồ án\HotelManagement\HotelManagement\
 D:\HK1_2020-2021\Software Engineering\Đồ án\HotelManagement\HotelManagement\obj\Debug\HotelManagement.csproj.CopyComplete
 D:\HK1_2020-2021\Software Engineering\Đồ án\HotelManagement\HotelManagement\obj\Debug\HotelManagement.dll
 D:\HK1_2020-2021\Software Engineering\Đồ án\HotelManagement\HotelManagement\obj\Debug\HotelManagement.pdb
-C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\obj\Debug\HotelManagement.Migrations.InitialModel.resources
-C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\obj\Debug\HotelManagement.csproj.GenerateResource.cache
-C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\obj\Debug\HotelManagement.Migrations.UpdateInvoiceIdNotIncreament.resources
-C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\obj\Debug\HotelManagement.Migrations.AddRoleAndAccountTable.resources
-C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\obj\Debug\HotelManagement.Migrations.AddRoomIsAvailableAndSomeConstraints.resources
-C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\obj\Debug\HotelManagement.Migrations.removeGuestCMNDUnique.resources
 C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\bin\PagedList.dll
 C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\bin\PagedList.Mvc.dll
 C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\bin\PagedList.xml
 C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\bin\PagedList.Mvc.xml
-C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\obj\Debug\HotelManagement.Migrations.AddSexPropertyToGuest.resources
+C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\obj\Debug\HotelManagement.Migrations.InitialModel.resources
+C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\obj\Debug\HotelManagement.csproj.GenerateResource.cache

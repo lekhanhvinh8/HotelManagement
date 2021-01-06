@@ -7,13 +7,13 @@ namespace HotelManagement.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class AddRoleAndAccountTable : IMigrationMetadata
+    public sealed partial class InitialModel : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddRoleAndAccountTable));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialModel));
         
         string IMigrationMetadata.Id
         {
-            get { return "202101040751082_AddRoleAndAccountTable"; }
+            get { return "202101060545404_InitialModel"; }
         }
         
         string IMigrationMetadata.Source

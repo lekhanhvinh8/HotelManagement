@@ -24,8 +24,10 @@ namespace HotelManagement.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Invoice>().Property(i => i.InvoiceID).HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-            modelBuilder.Entity<Invoice>().HasKey(i => i.InvoiceID);
+            modelBuilder.Entity<Invoice>().Property(i => i.ID).HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+            modelBuilder.Entity<Invoice>().Property(i => i.ID).HasMaxLength(449);
+            modelBuilder.Entity<Invoice>().HasKey(i => i.ID);
+            modelBuilder.Entity<Invoice>().HasMany(i => i.RoomRentalSlips).WithOptional(r => r.Invoice);
 
             modelBuilder.Entity<Room>().Property(r => r.RoomNumber).HasMaxLength(10);
             modelBuilder.Entity<Room>().Property(r => r.RoomNumber).IsRequired();
@@ -38,8 +40,9 @@ namespace HotelManagement.Models
             modelBuilder.Entity<RoomRentalSlip>().HasRequired(r => r.Room).WithMany(r => r.RoomRentalSlips);
 
             modelBuilder.Entity<Account>().Property(a => a.Username).HasMaxLength(449);
+            modelBuilder.Entity<Account>().Property(a => a.Username).IsRequired();
             modelBuilder.Entity<Account>().HasIndex(a => a.Username).IsUnique();
-
+            modelBuilder.Entity<Account>().Property(a => a.PasswordHash).IsRequired();
 
 
             base.OnModelCreating(modelBuilder);

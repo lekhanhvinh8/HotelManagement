@@ -17,10 +17,6 @@ namespace HotelManagement.Controllers
         {
             _context = new HotelManagementDbContext();
         }
-        public ActionResult Index()
-        {
-            return View();
-        }
         
         public ActionResult MakeRoomRental()
         {

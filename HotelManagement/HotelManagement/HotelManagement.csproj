@@ -157,29 +157,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202101030952074_Initial Model.cs" />
-    <Compile Include="Migrations\202101030952074_Initial Model.designer.cs">
-      <DependentUpon>202101030952074_Initial Model.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202101031246248_UpdateInvoiceIdNotIncreament.cs" />
-    <Compile Include="Migrations\202101031246248_UpdateInvoiceIdNotIncreament.designer.cs">
-      <DependentUpon>202101031246248_UpdateInvoiceIdNotIncreament.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202101040751082_AddRoleAndAccountTable.cs" />
-    <Compile Include="Migrations\202101040751082_AddRoleAndAccountTable.designer.cs">
-      <DependentUpon>202101040751082_AddRoleAndAccountTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202101041140172_AddRoomIsAvailableAndSomeConstraints.cs" />
-    <Compile Include="Migrations\202101041140172_AddRoomIsAvailableAndSomeConstraints.designer.cs">
-      <DependentUpon>202101041140172_AddRoomIsAvailableAndSomeConstraints.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202101041623392_removeGuestCMNDUnique.cs" />
-    <Compile Include="Migrations\202101041623392_removeGuestCMNDUnique.designer.cs">
-      <DependentUpon>202101041623392_removeGuestCMNDUnique.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202101050508043_AddSexPropertyToGuest.cs" />
-    <Compile Include="Migrations\202101050508043_AddSexPropertyToGuest.designer.cs">
-      <DependentUpon>202101050508043_AddSexPropertyToGuest.cs</DependentUpon>
+    <Compile Include="Migrations\202101060545404_InitialModel.cs" />
+    <Compile Include="Migrations\202101060545404_InitialModel.designer.cs">
+      <DependentUpon>202101060545404_InitialModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
@@ -511,23 +491,8 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202101030952074_Initial Model.resx">
-      <DependentUpon>202101030952074_Initial Model.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202101031246248_UpdateInvoiceIdNotIncreament.resx">
-      <DependentUpon>202101031246248_UpdateInvoiceIdNotIncreament.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202101040751082_AddRoleAndAccountTable.resx">
-      <DependentUpon>202101040751082_AddRoleAndAccountTable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202101041140172_AddRoomIsAvailableAndSomeConstraints.resx">
-      <DependentUpon>202101041140172_AddRoomIsAvailableAndSomeConstraints.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202101041623392_removeGuestCMNDUnique.resx">
-      <DependentUpon>202101041623392_removeGuestCMNDUnique.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202101050508043_AddSexPropertyToGuest.resx">
-      <DependentUpon>202101050508043_AddSexPropertyToGuest.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202101060545404_InitialModel.resx">
+      <DependentUpon>202101060545404_InitialModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
