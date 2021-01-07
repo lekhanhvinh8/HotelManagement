@@ -182,7 +182,12 @@ C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\bin\Pag
 C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\bin\PagedList.Mvc.xml
 C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\obj\Debug\HotelManagement.Migrations.InitialModel.resources
 C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\obj\Debug\HotelManagement.csproj.GenerateResource.cache
-D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\obj\Debug\HotelManagement.Migrations.AddStatusToRoomRentalSlip.resources
+D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\obj\Debug\HotelManagement.Migrations.InitialModel.resources
+D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\obj\Debug\HotelManagement.Migrations.AddStatusToRoomRentalSlip.resources
+D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\obj\Debug\HotelManagement.csproj.GenerateResource.cache
+D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\obj\Debug\HotelManagement.csproj.CoreCompileInputs.cache
+D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\obj\Debug\HotelManagement.csprojAssemblyReference.cache
 D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\bin\HotelManagement.dll.config
 D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\bin\HotelManagement.dll
 D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\bin\HotelManagement.pdb
@@ -199,6 +204,7 @@ D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManag
 D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
 D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
 D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\bin\roslyn\Microsoft.CSharp.Core.targets
+D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
 D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
 D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\bin\roslyn\Microsoft.Managed.Core.targets
 D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\bin\roslyn\Microsoft.VisualBasic.Core.targets
@@ -270,12 +276,8 @@ D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManag
 D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\bin\System.Web.Http.xml
 D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\bin\System.Web.Http.WebHost.xml
 D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\obj\Debug\HotelManagement.Migrations.InitialModel.resources
-D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\obj\Debug\HotelManagement.csproj.GenerateResource.cache
-D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\obj\Debug\HotelManagement.csproj.CoreCompileInputs.cache
 D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\obj\Debug\HotelManagement.csproj.CopyComplete
 D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\obj\Debug\HotelManagement.dll
 D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\obj\Debug\HotelManagement.pdb
-D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\obj\Debug\HotelManagement.Migrations.AddStatusToRoomRentalSlip.resources
-D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\obj\Debug\HotelManagement.csprojAssemblyReference.cache
-C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\obj\Debug\HotelManagement.Migrations.AddStatusToRoomRentalSlip.resources
+C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\bin\log4net.dll
+C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\bin\log4net.xml

@@ -20,30 +20,52 @@
 
     </div>
     <div class="chart-container-revenue">
+        <div class="form-inline select-month">
+            <label id="total-revenue" class="control-label" style="margin-top:10px;"></label>
+        </div>
+
         <canvas id="canvas-revenue"></canvas>
 
         <br />
+
         <div class="form-inline select-month">
+
             <label class="control-label">Month: </label>
             <select id="month-selector" class="form-control" style="margin-right:20px;"></select>
 
             <label class="control-label">Year: </label>
             <select id="year-selector" class="form-control" style="margin-right:20px;"></select>
 
-            <button class="btn btn-success">Reload</button>
+            <button id="btn-reload-revenue" class="btn btn-success">Reload</button>
         </div>
+
     </div>
 
     <div class="chart-container-density">
+        <div class="form-inline select-month">
+            <label id="total-rental-days" class="control-label" style="margin-top:10px;"></label>
+        </div>
+        
         <canvas id="canvas-density"></canvas>
 
         <br />
 
         <div class="form-inline select-month">
+            <label class="control-label">Month: </label>
+            <select id="month-selector-density" class="form-control" style="margin-right:20px;"></select>
+
+            <label class="control-label">Year: </label>
+            <select id="year-selector-density" class="form-control" style="margin-right:20px;"></select>
+        </div>
+
+        <br />
+
+        <div class="form-inline select-month">
+
             <label class="control-label">Room Category: </label>
             <select id="room-category-selector" class="form-control" style="margin-right:20px;"></select>
 
-            <button class="btn btn-success">Reload</button>
+            <button id="btn-reload-density" class="btn btn-success">Reload</button>
         </div>
     </div>
 
@@ -53,24 +75,29 @@
     <script src="~/Scripts/bootbox.js"></script>
     <script src="~/Scripts/jquery.validate.js"></script>
     <script src="~/Scripts/Chart.js"></script>
-    <script src="~/Scripts/moment-with-locales.min.js"></script>
 
     <script>
         $(document).ready(function () {
-
+            var month = new Date().getMonth();
             for (var i = 1; i < 12; i++) {
                 $("#month-selector").append("<option>" + i + "</option>");
+                $("#month-selector-density").append("<option>" + i + "</option>");
             }
+            $("#month-selector").val(month + 1);
+            $("#month-selector-density").val(month + 1);
 
             var year = new Date().getFullYear();
             for (var i = 2000; i <= year; i++) {
                 $("#year-selector").append("<option>" + i + "</option>");
+                $("#year-selector-density").append("<option>" + i + "</option>");
             }
             $("#year-selector").val(year);
+            $("#year-selector-density").val(year);
 
             $.ajax({
                 url: "/api/RoomCategories/GetAll",
                 method: "get",
+                async: false,
                 success: function (response) {
                     for (var i = 0; i < response.length; i++) {
                         $("#room-category-selector").append("<option value=" + response[i].id + "> " + response[i].name + " </option>");
@@ -81,47 +108,227 @@
             var canvasRevenue = $("#canvas-revenue");
             var canvasDensity = $("#canvas-density");
 
-            data = {
-                datasets: [
-                    {
-                        label: 'My First Dataset',
-                        data: [33, 33, 33],
-                        backgroundColor: [
-                            'rgb(255, 99, 132)',
-                            'rgb(54, 162, 235)',
-                            'rgb(255, 205, 86)'
+            var chartRevenue;
+            var chartDensity;
+
+            $.ajax({
+                url: "/api/Statistic/GetAllRoomCategories?month=" + $("#month-selector").val() + "&year=" + $("#year-selector").val(),
+                method: "get",
+                async: false,
+                success: function (response) {
+                    var totalRevenue = 0;
+                    var totalCosts = [];
+                    var names = [];
+                    var backgroundColors = [];
+
+                    for (var i = 0; i < response.length; i++) {
+                        totalRevenue += response[i].totalCostInAMonth;
+                        totalCosts.push(response[i].totalCostInAMonth);
+                        names.push(response[i].name);
+
+                        var r = Math.floor(Math.random() * 255);
+                        var g = Math.floor(Math.random() * 255);
+                        var b = Math.floor(Math.random() * 255);
+                        backgroundColors.push("rgb(" + r + "," + g + "," + b + ")");
+                    }
+
+                    $("#total-revenue").text("Total Revenue: " + totalRevenue);
+
+                    var data = {
+                        datasets: [
+                            {
+                                label: 'My First Dataset',
+                                data: totalCosts,
+                                backgroundColor: backgroundColors,
+                                borderColor: "#fff",
+                                hoverOffset: 4,
+                            },
                         ],
-                        hoverOffset: 4,
-                    },
-                ],
 
-                // These labels appear in the legend and in the tooltips when hovering different arcs
-                labels: [
-                    'Red',
-                    'Yellow',
-                    'Blue'
-                ]
-            };
-            // For a pie chart
-            var charRevenue = new Chart(canvasRevenue, {
-                type: 'doughnut',
-                data: data,
-                options: {
-                    responsive: true,
+                        // These labels appear in the legend and in the tooltips when hovering different arcs
+                        labels: names,
+                    };
 
+                    var options = {
+                        responsive: true,
+                    };
+
+                    chartRevenue = new Chart(canvasRevenue, {
+                        type: 'pie',
+                        data: data,
+                        options: options,
+                    });
                 },
             });
-            var chartDesity = new Chart(canvasDensity, {
-                type: 'doughnut',
-                data: data,
-                options: {
-                    responsive: true,
 
+            $.ajax({
+                url: "/api/Statistic/GetAllRooms?month=" + $("#month-selector").val() + "&year=" + $("#year-selector").val() + "&roomCategoryId=" + $("#room-category-selector option:selected").attr("value"),
+                method: "get",
+                async: false,
+                success: function (response) {
+                    var totalAllDays = 0;
+                    var totalDays = [];
+                    var roomNumbers = [];
+                    var backgroundColors = [];
+
+                    for (var i = 0; i < response.length; i++) {
+                        totalAllDays += response[i].numberRentalDays;
+                        totalDays.push(response[i].numberRentalDays);
+                        roomNumbers.push(response[i].roomNumber);
+
+                        var r = Math.floor(Math.random() * 255);
+                        var g = Math.floor(Math.random() * 255);
+                        var b = Math.floor(Math.random() * 255);
+                        backgroundColors.push("rgb(" + r + "," + g + "," + b + ")");
+                    }
+
+                    $("#total-rental-days").text("Total Tental Days: " + totalAllDays);
+
+                    var data = {
+                        datasets: [
+                            {
+                                label: 'My First Dataset',
+                                data: totalDays,
+                                backgroundColor: backgroundColors,
+                                borderColor: "#fff",
+                                hoverOffset: 4,
+                            },
+                        ],
+
+                        // These labels appear in the legend and in the tooltips when hovering different arcs
+                        labels: roomNumbers,
+                    };
+
+                    var options = {
+                        responsive: true,
+                    };
+
+                    chartDensity = new Chart(canvasDensity, {
+                        type: 'pie',
+                        data: data,
+                        options: options,
+                    });
                 },
+
             });
+
+            $("#btn-reload-revenue").on("click", function () {
+                ReloadChartRevenue(chartRevenue, canvasRevenue);
+            });
+
+            $("#btn-reload-density").on("click", function () {
+                ReloadChartDensity(chartDensity, canvasDensity);
+            })
 
         });
 
+        function ReloadChartRevenue(chartRevenue, canvasRevenue) {
+            $.ajax({
+                url: "/api/Statistic/GetAllRoomCategories?month=" + $("#month-selector").val() + "&year=" + $("#year-selector").val(),
+                method: "get",
+                success: function (response) {
+                    var totalRevenue = 0;
+                    var totalCosts = [];
+                    var names = [];
+                    var backgroundColors = [];
+
+                    for (var i = 0; i < response.length; i++) {
+                        totalRevenue += response[i].totalCostInAMonth;
+                        totalCosts.push(response[i].totalCostInAMonth);
+                        names.push(response[i].name);
+
+                        var r = Math.floor(Math.random() * 255);
+                        var g = Math.floor(Math.random() * 255);
+                        var b = Math.floor(Math.random() * 255);
+                        backgroundColors.push("rgb(" + r + "," + g + "," + b + ")");
+                    }
+
+                    $("#total-revenue").text("Total Revenue: " + totalRevenue);
+
+                    var data = {
+                        datasets: [
+                            {
+                                label: 'My First Dataset',
+                                data: totalCosts,
+                                backgroundColor: backgroundColors,
+                                borderColor: "#fff",
+                                hoverOffset: 4,
+                            },
+                        ],
+
+                        // These labels appear in the legend and in the tooltips when hovering different arcs
+                        labels: names,
+                    };
+
+                    var options = {
+                        responsive: true,
+                    };
+
+                    chartRevenue.destroy();
+
+                    chartRevenue = new Chart(canvasRevenue, {
+                        type: 'pie',
+                        data: data,
+                        options: options,
+                    });
+                },
+            });
+        }
+
+        function ReloadChartDensity(chartDensity, canvasDensity) {
+            $.ajax({
+                url: "/api/Statistic/GetAllRooms?month=" + $("#month-selector").val() + "&year=" + $("#year-selector").val() + "&roomCategoryId=" + $("#room-category-selector option:selected").attr("value"),
+                method: "get",
+                async: false,
+                success: function (response) {
+                    var totalAllDays = 0;
+                    var totalDays = [];
+                    var roomNumbers = [];
+                    var backgroundColors = [];
+
+                    for (var i = 0; i < response.length; i++) {
+                        totalAllDays += response[i].numberRentalDays;
+                        totalDays.push(response[i].numberRentalDays);
+                        roomNumbers.push(response[i].roomNumber);
+
+                        var r = Math.floor(Math.random() * 255);
+                        var g = Math.floor(Math.random() * 255);
+                        var b = Math.floor(Math.random() * 255);
+                        backgroundColors.push("rgb(" + r + "," + g + "," + b + ")");
+                    }
+
+                    $("#total-rental-days").text("Total Tental Days: " + totalAllDays);
+
+                    var data = {
+                        datasets: [
+                            {
+                                label: 'My First Dataset',
+                                data: totalDays,
+                                backgroundColor: backgroundColors,
+                                borderColor: "#fff",
+                                hoverOffset: 4,
+                            },
+                        ],
+
+                        // These labels appear in the legend and in the tooltips when hovering different arcs
+                        labels: roomNumbers,
+                    };
+
+                    var options = {
+                        responsive: true,
+                    };
+
+                    chartDensity.destroy();
+
+                    chartDensity = new Chart(canvasDensity, {
+                        type: 'pie',
+                        data: data,
+                        options: options,
+                    });
+                },
+
+            });
+        }
     </script>
 </body>
 </html>

@@ -43,5 +43,6 @@ namespace HotelManagement.Models
             tdes.Clear();
             return Convert.ToBase64String(resultArray, 0, resultArray.Length);
         }
+
     }
 }

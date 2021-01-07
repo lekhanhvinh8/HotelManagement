@@ -70,5 +70,7 @@ namespace HotelManagement.Models.Dtos
 
             return dateTime;
         }
+
+
     }
 }

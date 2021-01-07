@@ -1,4 +1,5 @@
 ﻿using HotelManagement.Models;
+using HotelManagement.Models.ViewModels;
 using PagedList;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace HotelManagement.Controllers
         {
             _context = new HotelManagementDbContext();
         }
-        
+
         public ActionResult MakeRoomRental()
         {
             return View();
@@ -26,7 +27,10 @@ namespace HotelManagement.Controllers
 
         public ActionResult RoomRentalSlip(int page = 1, int pagesize = 5)
         {
-            IEnumerable<RoomRentalSlip> listRoomRentalSlip = _context.RoomRentalSlips.OrderBy(x => x.Id).ToPagedList(page, pagesize);
+            IEnumerable<RoomRentalSlip> listRoomRentalSlip = (from i in _context.RoomRentalSlips
+                                                              where i.InvoiceID == null
+                                                              orderby i.Id
+                                                              select i).ToPagedList(page, pagesize);
             return View(listRoomRentalSlip);
         }
 
@@ -39,6 +43,7 @@ namespace HotelManagement.Controllers
 
             var roomRental = (from j in _context.RoomRentalSlips
                               where j.Room.RoomNumber == room
+                              where j.InvoiceID == null
                               select j).SingleOrDefault();
 
             if (roomNum == null || roomRental == null)
@@ -48,18 +53,6 @@ namespace HotelManagement.Controllers
             return Content("CreateInvoice?room=" + roomNum.Id.ToString());
         }
 
-        //public ActionResult AddRoomRentalSlip(int room)
-        //{
-        //    var roomRentalSlip = (from i in _context.RoomRentalSlips
-        //                          where i.RoomId == room
-        //                          orderby i.Id
-        //                          select i).SingleOrDefault();
-        //    var listRoomRentalSlip = new List<RoomRentalSlip>();
-        //    listRoomRentalSlip.Add(roomRentalSlip);
-        //    return View(listRoomRentalSlip);
-        //}
-
-        
         public ActionResult RawInvoice()
         {
             IEnumerable<RoomRentalSlip> listRoomRentalSlip = (from i in _context.RoomRentalSlips
@@ -69,7 +62,7 @@ namespace HotelManagement.Controllers
             return View("CreateInvoice", listRoomRentalSlip);
         }
 
-        
+
         public ActionResult CreateInvoice(int room)
         {
             var roomRental = (from i in _context.RoomRentalSlips
@@ -86,7 +79,7 @@ namespace HotelManagement.Controllers
                 _context.RoomRentalSlips.AddOrUpdate(roomRental);
                 _context.SaveChanges();
             }
-           
+
             IEnumerable<RoomRentalSlip> listRoomRentalSlip = (from i in _context.RoomRentalSlips
                                                               where i.Status == true
                                                               orderby i.Id
@@ -94,7 +87,7 @@ namespace HotelManagement.Controllers
             return View(listRoomRentalSlip);
         }
 
-        public ActionResult InvoiceOfGuest(int icOfGuest, string nameOfGuest, string addressOfGuest, bool genderOfGuest)
+        public ActionResult InvoiceOfGuest(int icOfGuest, string nameOfGuest, string addressOfGuest, bool genderOfGuest, int CatOfGuest, float totalCost)
         {
             try
             {
@@ -102,30 +95,59 @@ namespace HotelManagement.Controllers
                                  where i.CMND == icOfGuest
                                  select i).SingleOrDefault();
 
+                var invoiceID = new GenerateInvoiceID().RandomString(10);
                 if (guestInDb == null)
                 {
-                    var newGuest = new Guest();
-                    newGuest.CMND = icOfGuest;
-                    newGuest.Name = nameOfGuest;
-                    newGuest.Address = addressOfGuest;
-                    newGuest.Sex = genderOfGuest;
-                    _context.Guests.Add(newGuest);
-                    _context.SaveChanges();
-                    return Content("true");
+                    var guest = new Guest();
+                    guest.CMND = icOfGuest;
+                    guest.Name = nameOfGuest;
+                    guest.Sex = genderOfGuest;
+                    guest.Address = addressOfGuest;
+                    guest.GuestCategoryId = CatOfGuest;
+                    if (new InvoiceModel().AddGuest(guest))
+                    {                        
+                        if (new InvoiceModel().AddInvoice(invoiceID, guest.Id, totalCost))
+                        {
+                            var roomRentalSlips = (from i in _context.RoomRentalSlips
+                                                   where i.Status == true
+                                                   select i).ToList();
+                            foreach (var item in roomRentalSlips)
+                            {
+                                item.InvoiceID = invoiceID;
+                                item.Status = false;
+                                if (new InvoiceModel().UpdateRoomRentalSlip(item))
+                                {
+                                }
+                            }                                                 
+                        }
+                    }
+                    return Content("/Manager/InvoiceManagement");
+
                 }
                 else
                 {
-                    guestInDb.Name = nameOfGuest;
-                    guestInDb.Address = addressOfGuest;
-                    guestInDb.Sex = genderOfGuest;
-                    _context.Guests.AddOrUpdate(guestInDb);
-                    _context.SaveChanges();
-                    return Content("true");
+                    if (new InvoiceModel().UpdateGuest(guestInDb, nameOfGuest, genderOfGuest, addressOfGuest, CatOfGuest))
+                    {
+                        if (new InvoiceModel().AddInvoice(invoiceID ,guestInDb.Id, totalCost))
+                        {
+                            var roomRentalSlips = (from i in _context.RoomRentalSlips
+                                                   where i.Status == true
+                                                   select i).ToList();
+                            foreach (var item in roomRentalSlips)
+                            {
+                                item.InvoiceID = invoiceID;
+                                item.Status = false;
+                                if (new InvoiceModel().UpdateRoomRentalSlip(item))
+                                {
+                                }
+                            }                            
+                        }
+                    }
+                    return Content("/Manager/InvoiceManagement");
                 }
             }
             catch
             {
-
                 return Content("false");
             }
         }
@@ -142,7 +164,7 @@ namespace HotelManagement.Controllers
                 _context.RoomRentalSlips.AddOrUpdate(roomRental);
                 _context.SaveChanges();
                 return Content("/Manager/RawInvoice");
-            }     
+            }
             return Content("false");
         }
         public ActionResult InvoiceManagement()
