@@ -10,6 +10,9 @@
 		<button class="btn btn-primary" data-toggle="modal" data-target="#searchRoom">Add Room</button>
 	</div>
 	<div>
+		@{
+			var totalCost = 0.0; 
+		}
 		<table class="table">
 			<thead>
 				<tr>
@@ -27,6 +30,7 @@
 					var rentalDate = (item.EndDate - item.StartDate).TotalDays.ToString();
 					var surcharge = 0.0;
 					var hasForeign = false;
+
 					foreach (var i in item.Guests)
 					{
 						if (i.GuestCategory.Coefficient > 1.0)
@@ -38,7 +42,14 @@
 					if (item.Guests.Count >= item.Room.RoomCategory.NumStartSurcharge)
 					{
 						var sur = item.Room.RoomCategory.SurchargeRate;
-						surcharge = (item.Room.RoomCategory.UnitPrice * sur) + (item.Room.RoomCategory.UnitPrice * coefficient);
+						if (hasForeign == true)
+						{
+							surcharge = (item.Room.RoomCategory.UnitPrice * sur) + (item.Room.RoomCategory.UnitPrice * coefficient);
+						}
+						else
+						{
+							surcharge = (item.Room.RoomCategory.UnitPrice * sur);
+						}
 					}
 					else
 					{
@@ -54,6 +65,7 @@
 					int ren;
 					ren = Int32.Parse(rentalDate);
 					var lineTotal = (item.Room.RoomCategory.UnitPrice + surcharge) * ren;
+					totalCost += lineTotal;
 					<tr>
 						<td>@item.Room.RoomNumber</td>
 						<td>@rentalDate</td>
@@ -66,11 +78,17 @@
 					</tr>
 				}
 			</tbody>
+
 		</table>
+		<div style="float: right;">
+			<h2	>Total Cost: @totalCost</h2>
+			<p id="invoiceCost" hidden>@totalCost</p>
+		</div>
 	</div>
 	<div style="border-top: 1px groove;">
 		@Html.PagedListPager(Model, Page => Url.Action("CreateInvoice", new { Page }))
 	</div>
+	
 	<div style="float: right">
 		<button class="btn btn-primary" data-toggle="modal" data-target="#getInfo">Create Invoice</button>
 	</div>
@@ -179,25 +197,23 @@
 			var identityCard = $('#addIC').val();
 			var name = $('#addName').val();
 			var address = $('#addAddress').val();
-			if ($('#maleRBtn').checked == true) {
-				var gender = $('#maleRBtn').val();
-			}
-			else {
-				var gender = $('#femaleRBtn').val();
-			}
+			var guestCat = $('#select-guest-category').val();
+			var invoiceCost = $('#invoiceCost').text();
+			var cost = parseFloat(invoiceCost);
+			var gender = $('input[name="gender"]:checked').val();
+			
 			$.ajax({
 				url: '/Manager/InvoiceOfGuest',
 				type: 'POST',
-				data: { icOfGuest: identityCard, nameOfGuest: name, addressOfGuest: address, genderOfGuest: gender },
+				data: { icOfGuest: identityCard, nameOfGuest: name, addressOfGuest: address, genderOfGuest: gender, CatOfGuest: guestCat, totalCost: cost },
 				success: function (msg) {
-					if (msg == 'true') {
-						alert('Success')
-						var identityCard = $('#addIC').val();
-						var name = $('#addName').val();
-						var address = $('#addAddress').val();
+					if (msg == 'false') {
+						alert('Error');
 					}
 					else {
-						alert('Error');
+						setTimeout(function () {
+							window.location.href = '' + msg + '';
+						}, 10);
 					}
 				}
 			});

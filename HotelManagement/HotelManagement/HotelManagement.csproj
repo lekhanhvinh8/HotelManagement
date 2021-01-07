@@ -184,6 +184,8 @@
     <Compile Include="Models\RoomCategory.cs" />
     <Compile Include="Models\RoomRentalSlip.cs" />
     <Compile Include="Models\Syptop.cs" />
+    <Compile Include="Models\ViewModels\GenerateInvoiceID.cs" />
+    <Compile Include="Models\ViewModels\InvoiceModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -477,11 +479,9 @@
     <Content Include="Views\Manager\RoomRentalSlip.cshtml" />
     <Content Include="Views\Manager\InvoiceManagement.cshtml" />
     <Content Include="Views\Manager\CreateInvoice.cshtml" />
-    <Content Include="Views\Manager\AddRoomRentalSlip.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\ViewModels\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
