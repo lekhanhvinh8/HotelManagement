@@ -20,6 +20,7 @@ namespace HotelManagement.Models.Dtos
             this.Sex = guest.Sex;
             this.Address = guest.Address;
             this.GuestCategoryId = guest.GuestCategoryId;
+            this.GuestCategoryName = guest.GuestCategory.Name;
         }
 
         public Guest CreateModel()
@@ -40,6 +41,8 @@ namespace HotelManagement.Models.Dtos
         public bool Sex { get; set; }
         public string Address { get; set; }
         public int GuestCategoryId { get; set; }
+
+        public string GuestCategoryName { get; set; }
 
     }
 }

@@ -54,7 +54,13 @@ namespace HotelManagement.Controllers.api
             if (room.IsAvailable == false)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
+            foreach (var guest in roomRentalSlip.Guests)
+            {
+                guest.GuestCategory = this._context.GuestCategories.Find(guest.GuestCategoryId);
+            }
+
             room.IsAvailable = false;
+
             this._context.RoomRentalSlips.Add(roomRentalSlip);
             this._context.SaveChanges();
 

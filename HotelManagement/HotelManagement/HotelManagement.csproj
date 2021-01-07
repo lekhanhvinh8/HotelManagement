@@ -172,9 +172,11 @@
     <Compile Include="Models\Dtos\GuestCategoryDto.cs" />
     <Compile Include="Models\Dtos\GuestDto.cs" />
     <Compile Include="Models\Dtos\InvoiceDto.cs" />
+    <Compile Include="Models\Dtos\InvoiceFullInfoDto.cs" />
     <Compile Include="Models\Dtos\RoomCategoryDto.cs" />
     <Compile Include="Models\Dtos\RoomDto.cs" />
     <Compile Include="Models\Dtos\RoomRentalSlipDto.cs" />
+    <Compile Include="Models\Dtos\RoomRentalSlipFullInfoDto.cs" />
     <Compile Include="Models\Guest.cs" />
     <Compile Include="Models\GuestCategory.cs" />
     <Compile Include="Models\HotelManagementDbContext.cs" />
@@ -365,6 +367,7 @@
     <Content Include="Content\DataTables\css\common.scss" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\chart-area-demo.js" />
+    <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\copy_csv_xls_pdf.swf" />
     <Content Include="Scripts\dataTables.bootstrap.js" />
@@ -457,6 +460,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
     <Content Include="Scripts\TableTools.js" />
     <Content Include="Scripts\TableTools_orig.js" />
     <Content Include="Scripts\ZeroClipboard.js" />
@@ -478,6 +482,7 @@
     <Content Include="Views\Manager\InvoiceManagement.cshtml" />
     <Content Include="Views\Manager\CreateInvoice.cshtml" />
     <Content Include="Views\Manager\AddRoomRentalSlip.cshtml" />
+    <Content Include="Views\Manager\Statistical.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

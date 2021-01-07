@@ -1,0 +1,127 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>statistical</title>
+
+    <link rel="stylesheet" type="text/css" href="~/Content/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/Manager.css" />
+    <link rel="stylesheet" type="text/css" href="~/Content/DataTables/css/dataTables.bootstrap.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+
+    </div>
+    <div class="chart-container-revenue">
+        <canvas id="canvas-revenue"></canvas>
+
+        <br />
+        <div class="form-inline select-month">
+            <label class="control-label">Month: </label>
+            <select id="month-selector" class="form-control" style="margin-right:20px;"></select>
+
+            <label class="control-label">Year: </label>
+            <select id="year-selector" class="form-control" style="margin-right:20px;"></select>
+
+            <button class="btn btn-success">Reload</button>
+        </div>
+    </div>
+
+    <div class="chart-container-density">
+        <canvas id="canvas-density"></canvas>
+
+        <br />
+
+        <div class="form-inline select-month">
+            <label class="control-label">Room Category: </label>
+            <select id="room-category-selector" class="form-control" style="margin-right:20px;"></select>
+
+            <button class="btn btn-success">Reload</button>
+        </div>
+    </div>
+
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/bootbox.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/Chart.js"></script>
+    <script src="~/Scripts/moment-with-locales.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            for (var i = 1; i < 12; i++) {
+                $("#month-selector").append("<option>" + i + "</option>");
+            }
+
+            var year = new Date().getFullYear();
+            for (var i = 2000; i <= year; i++) {
+                $("#year-selector").append("<option>" + i + "</option>");
+            }
+            $("#year-selector").val(year);
+
+            $.ajax({
+                url: "/api/RoomCategories/GetAll",
+                method: "get",
+                success: function (response) {
+                    for (var i = 0; i < response.length; i++) {
+                        $("#room-category-selector").append("<option value=" + response[i].id + "> " + response[i].name + " </option>");
+                    }
+                },
+            });
+
+            var canvasRevenue = $("#canvas-revenue");
+            var canvasDensity = $("#canvas-density");
+
+            data = {
+                datasets: [
+                    {
+                        label: 'My First Dataset',
+                        data: [33, 33, 33],
+                        backgroundColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(54, 162, 235)',
+                            'rgb(255, 205, 86)'
+                        ],
+                        hoverOffset: 4,
+                    },
+                ],
+
+                // These labels appear in the legend and in the tooltips when hovering different arcs
+                labels: [
+                    'Red',
+                    'Yellow',
+                    'Blue'
+                ]
+            };
+            // For a pie chart
+            var charRevenue = new Chart(canvasRevenue, {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+
+                },
+            });
+            var chartDesity = new Chart(canvasDensity, {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+
+                },
+            });
+
+        });
+
+    </script>
+</body>
+</html>

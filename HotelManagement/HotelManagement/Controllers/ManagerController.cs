@@ -149,5 +149,10 @@ namespace HotelManagement.Controllers
         {
             return View();
         }
+
+        public ActionResult Statistical()
+        {
+            return View();
+        }
     }
 }
