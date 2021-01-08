@@ -502,6 +502,7 @@
     <Content Include="Views\Manager\CreateInvoice.cshtml" />
     <Content Include="Views\Manager\Statistical.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Shared\View.cshtml" />
     <Content Include="Views\MomoPayment\ReturnUrl.cshtml" />
   </ItemGroup>
   <ItemGroup>

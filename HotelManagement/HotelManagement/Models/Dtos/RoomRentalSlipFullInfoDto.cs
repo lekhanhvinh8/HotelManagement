@@ -42,7 +42,7 @@ namespace HotelManagement.Models.Dtos
             if (this.Guests.Count < this.NumStartSurcharge)
                 this.TotalCost = HighestGuestCoefficient * UnitPrice * Days;
             else
-                this.TotalCost = HighestGuestCoefficient * UnitPrice * Days + UnitPrice * this.SurchargeRate;
+                this.TotalCost = HighestGuestCoefficient * UnitPrice * Days + UnitPrice * this.SurchargeRate * Days;
         }
         public int Id { get; set; }
         public int RoomId { get; set; }

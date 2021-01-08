@@ -17,49 +17,91 @@
 
 </head>
 <body>
-    <div class="container">
-        <div class="well" id="search-by-invoiceID">
-            <div class="form-inline">
-                <input type="text" class="form-control" name="searchById" placeholder="Search" style="width:30%;" />
+	<div>
+		<div style="margin-bottom: 10rem">
+			<div class="navbar navbar-inverse navbar-fixed-top">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="#" style="color:white; font-size:40px">Hotel</a>
+					</div>
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav">
+							<li><a href="/Admin/Index">Admin</a></li>
+							<li><a href="/Manager/Statistical">Statistical</a></li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Management<span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li><a href="/Manager/MakeRoomRental">Make Room Rental</a></li>
+									<li><a href="/Manager/RoomRentalSlip">Room Rental</a></li>
+									<li><a href="/Manager/InvoiceManagement">Invoice Management</a></li>
+								</ul>
+							</li>
+						</ul>
+						<ul class="nav navbar-nav navbar-right">
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="https://png.pngtree.com/element_our/20190530/ourlarge/pngtree-520-couple-avatar-boy-avatar-little-dinosaur-cartoon-cute-image_1263411.jpg" alt="Avatar" class="avatar" style=" vertical-align: middle; width: 20px; height: 20px; border-radius: 50%;"> Account Name <span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li><a href="@Url.Action("Logout", "Account")">Log Out</a></li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
 
-                <button id="btn-search" class="btn btn-success" type="button">
-                    <i class="fa fa-search"></i>
-                </button>
-            </div>
-        </div>
-        <div class="well" id="filter-invoice">
-            <div class="form-group">
-                <div class="form-inline" name="search-by-date">
-                    <label for="startDate" class="control-label">Start Date: </label>
-                    <input type="text" class="form-control" name="startDate" style="width:15%; margin-right:30px;" />
+	</div>
+	<div class="container">
+		<h2 style="margin-top: -2rem">Invoice Management</h2>
+		<div class="well" id="search-by-invoiceID">
 
-                    <label for="endDate" class="control-label">End Date: </label>
-                    <input type="text" class="form-control" name="endDate" style="width:15%; margin-right:50px;" />
+			<div class="form-inline">
+				<input type="text" class="form-control" name="searchById" placeholder="Search" style="width:30%;" />
+
+				<button id="btn-search" class="btn btn-success" type="button">
+					<i class="fa fa-search"></i>
+				</button>
+			</div>
+		</div>
+		<div class="well" id="filter-invoice">
+			<div class="form-group">
+				<div class="form-inline" name="search-by-date">
+					<label for="startDate" class="control-label">Start Date: </label>
+					<input type="text" class="form-control" name="startDate" style="width:15%; margin-right:30px;" />
+
+					<label for="endDate" class="control-label">End Date: </label>
+					<input type="text" class="form-control" name="endDate" style="width:15%; margin-right:50px;" />
 
 
-                    <label for="searchByRoomCategory" class="control-label">Room category</label>
-                    <select class="form-control" name="searchByRoomCategory" style="width:10%; margin-right:15px;"></select>
+					<label for="searchByRoomCategory" class="control-label">Room category</label>
+					<select class="form-control" name="searchByRoomCategory" style="width:10%; margin-right:15px;"></select>
 
-                    <label for="searchByRoom" class="control-label">Room</label>
-                    <select class="form-control" name="searchByRoom" style="width:10%; margin-right:15px;"></select>
+					<label for="searchByRoom" class="control-label">Room</label>
+					<select class="form-control" name="searchByRoom" style="width:10%; margin-right:15px;"></select>
 
-                    <button id="btn-filter" class="btn btn-success" type="button">
-                        <i class="fa fa-filter"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
+					<button id="btn-filter" class="btn btn-success" type="button">
+						<i class="fa fa-filter"></i>
+					</button>
+				</div>
+			</div>
+		</div>
 
-        <div class="well">
-            <table id="table-invoices" class="table table-bordered">
-                <thead>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
+		<div class="well">
+			<table id="table-invoices" class="table table-bordered">
+				<thead>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
 
-    </div>
+	</div>
 
 
     <script src="~/Scripts/jquery-3.4.1.js"></script>
@@ -177,7 +219,7 @@
             $("#table-invoices tbody").on("click", ".js-delete", function () {
                 var button = $(this);
 
-                alert("delete " + button.attr("data"));
+                alert("You can not delete this invoice " + button.attr("data"));
             });
 
             function ReloadRoomCategorySelection() {
@@ -284,7 +326,7 @@
                             }
                             else {
                                 markup += "<div>";
-                                markup += "<label class='control-label'>Total Cost: " + rentals[i].unitPrice + " x " + rentals[i].highestGuestCoefficient + " x " + rentals[i].days + " + " + rentals[i].unitPrice + " x " + rentals[i].surchargeRate + " = " + rentals[i].totalCost + "</label>";
+                                markup += "<label class='control-label'>Total Cost: " + rentals[i].unitPrice + " x " + rentals[i].highestGuestCoefficient + " x " + rentals[i].days + " + " + rentals[i].unitPrice + " x " + rentals[i].surchargeRate + " x " + rentals[i].days + " = " + rentals[i].totalCost + "</label>";
                                 markup += "</div>";
                             }
 

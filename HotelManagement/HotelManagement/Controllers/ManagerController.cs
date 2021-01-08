@@ -23,16 +23,16 @@ namespace HotelManagement.Controllers
 
         public ActionResult MakeRoomRental()
         {
-            //if (!CheckLoginForManager())
-            //    return RedirectToAction("Login", "Account", new { roleID = RoleIds.Manager });
+            if (!CheckLoginForManager())
+                return RedirectToAction("Login", "Account", new { roleID = RoleIds.Manager });
 
             return View();
         }
 
         public ActionResult RoomRentalSlip(bool isPaid = false, int page = 1, int pagesize = 5)
         {
-            //if (!CheckLoginForManager())
-            //    return RedirectToAction("Login", "Account", new { roleID = RoleIds.Manager });
+            if (!CheckLoginForManager())
+                return RedirectToAction("Login", "Account", new { roleID = RoleIds.Manager });
             if (isPaid == false)
             {
                 ViewBag.Data = 1;
@@ -85,12 +85,13 @@ namespace HotelManagement.Controllers
 
         public ActionResult CreateInvoice(int room)
         {
-            //if (!CheckLoginForManager())
-            //    return RedirectToAction("Login", "Account", new { roleID = RoleIds.Manager });
+            if (!CheckLoginForManager())
+                return RedirectToAction("Login", "Account", new { roleID = RoleIds.Manager });
 
             var roomRental = (from i in _context.RoomRentalSlips
                               where i.RoomId == room
                               where i.Status == false
+                              where i.InvoiceID == null
                               select i).SingleOrDefault();
             if (roomRental == null)
             {
@@ -319,6 +320,8 @@ namespace HotelManagement.Controllers
         }
         public ActionResult InvoiceManagement()
         {
+            if (!CheckLoginForManager())
+                return RedirectToAction("Login", "Account", new { roleID = RoleIds.Manager });
             return View();
         }
 
@@ -332,6 +335,9 @@ namespace HotelManagement.Controllers
 
         public ActionResult Statistical()
         {
+            if (!CheckLoginForManager())
+                return RedirectToAction("Login", "Account", new { roleID = RoleIds.Manager });
+
             return View();
         }
     }

@@ -81,7 +81,7 @@ namespace HotelManagement.Controllers
             //System.Diagnostics.Process.Start(jmessage.GetValue("payUrl").ToString());
 
             var controller = new ManagerController();
-            controller.InvoiceOfGuest(icOfGuest, nameOfGuest, addressOfGuest, genderOfGuest, CatOfGuest, totalCost, myInvoiceID);
+            controller.Test(icOfGuest, nameOfGuest, addressOfGuest, genderOfGuest, CatOfGuest, totalCost, myInvoiceID);
 
             return Redirect(jmessage.GetValue("payUrl").ToString());
         }

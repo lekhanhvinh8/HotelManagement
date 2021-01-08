@@ -37,9 +37,9 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li><a href="/Admin/Index">Admin</a></li>
-                    <li><a href="/Manager/Statistical/">Thống Kê</a></li>
+                    <li><a href="/Manager/Statistical">Statistical</a></li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Quản Lý <span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Management<span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="/Manager/MakeRoomRental">Make Room Rental</a></li>
                             <li><a href="/Manager/RoomRentalSlip">Room Rental</a></li>
@@ -51,10 +51,7 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="https://png.pngtree.com/element_our/20190530/ourlarge/pngtree-520-couple-avatar-boy-avatar-little-dinosaur-cartoon-cute-image_1263411.jpg" alt="Avatar" class="avatar" style=" vertical-align: middle; width: 20px; height: 20px; border-radius: 50%;"> Account Name <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Profile</a></li>
-                            <li><a href="#">Change Password</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="#">Log Out</a></li>
+                            <li><a href="@Url.Action("Logout", "Account")">Log Out</a></li>
                         </ul>
                     </li>
                 </ul>
