@@ -25,20 +25,20 @@
 					<td>Num of Guest</td>
 					<td>Check-in Day</td>
 					<td>Check-out Day</td>
+					<td>
+						<a class="btn btn-danger" href="#" data-toggle="modal" data-target="#details">Detail </a>
+					</td>
 				</tr>
 			</thead>
 			<tbody>
 				@foreach (var item in Model)
 				{
 					<tr>
-						<td> @item.Id</td>
-						<td> @item.Room.RoomNumber</td>
-						<td> @item.Guests.Count</td>
-						<td> @item.StartDate</td>
-						<td> @item.EndDate</td>
-						<td>
-							<a href="#" data-toggle="modal" data-target="#details">Detail </a>
-						</td>
+						<td>@item.Id</td>
+						<td>@item.Room.RoomNumber</td>
+						<td>@item.Guests.Count</td>
+						<td>@Html.Raw(item.StartDate.ToString("d"))</td>
+						<td>@Html.Raw(item.EndDate.ToString("d"))</td>
 					</tr>
 				}
 			</tbody>
@@ -60,7 +60,7 @@
 
 <div class="modal fade" id="details" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
-		<div class="modal-content">
+		<div class="modal-content" style="max-height: 48rem; overflow-y: auto;">
 			<div class="modal-header">
 				<h4 class="modal-title" id="exampleModalLabel">Room Rental Slip Details</h4>
 				<button class="close" id="closeInfo" type="button" data-dismiss="modal" aria-label="Close">
@@ -73,16 +73,19 @@
 					<div class="form-group">
 						@foreach (var i in Model)
 						{
-							<label>Room Category: @i.Room.RoomCategory.Name </label>
+							<div style="display: grid">
+								<label>Room Number: @i.Room.RoomNumber &nbsp; Room Category: @i.Room.RoomCategory.Name </label>
+							</div>
+
 							<div class="form-group">
 								<h2>Guest Infomation</h2>
 								<table class="table">
 									<thead>
 										<tr>
-											<td> Name</td>
-											<td> Identity Card</td>
-											<td> Address</td>
-											<td> Guest Category</td>
+											<td>Name</td>
+											<td>Identity Card</td>
+											<td>Address</td>
+											<td>Guest Category</td>
 										</tr>
 									</thead>
 									<tbody>

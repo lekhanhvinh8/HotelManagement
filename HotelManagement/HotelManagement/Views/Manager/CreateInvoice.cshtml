@@ -191,8 +191,9 @@
 	</div>
 </div>
 
-<script src="~/Scripts/jquery.validate.js"></script>
 <script src="~/Scripts/jquery-3.4.1.js"></script>
+
+@*<script src="~/Scripts/jquery.validate.js"></script>*@
 
 
 @*<script>
@@ -220,27 +221,32 @@
 			var invoiceCost = $('#invoiceCost').text();
 			var cost = parseFloat(invoiceCost);
 			var gender = $('input[name="gender"]:checked').val();
-			
-			$.ajax({
-				url: '/Manager/InvoiceOfGuest',
-				type: 'POST',
-				data: { icOfGuest: identityCard, nameOfGuest: name, addressOfGuest: address, genderOfGuest: gender, CatOfGuest: guestCat, totalCost: cost },
-				success: function (msg) {
-					if (msg == 'false') {
-						alert('Error');
-					}
-					else {
-						if (msg == 'noRoom') {
-							alert('Please add room to pay');
+			if (identityCard == '' || name == '' || address == '' || gender == null) {
+				alert("Please enter guest infomation to pay");
+			}
+			else {
+				$.ajax({
+					url: '/Manager/InvoiceOfGuest',
+					type: 'POST',
+					data: { icOfGuest: identityCard, nameOfGuest: name, addressOfGuest: address, genderOfGuest: gender, CatOfGuest: guestCat, totalCost: cost },
+					success: function (msg) {
+						if (msg == 'false') {
+							alert('Error');
 						}
 						else {
-							setTimeout(function () {
-								window.location.href = '' + msg + '';
-							}, 10);
-						}					
+							if (msg == 'noRoom') {
+								alert('Please add room to pay');
+							}
+							else {
+								setTimeout(function () {
+									window.location.href = '' + msg + '';
+								}, 10);
+							}
+						}
 					}
-				}
-			});
+				});
+			}
+			
 		});
 		$('#check').click(function (e) {
 			e.preventDefault();
