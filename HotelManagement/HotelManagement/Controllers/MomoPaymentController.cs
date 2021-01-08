@@ -18,7 +18,7 @@ namespace HotelManagement.Controllers
             return View();
         }
 
-        public ActionResult Payment()
+        public ActionResult Payment(int icOfGuest, string nameOfGuest, string addressOfGuest, bool genderOfGuest, int CatOfGuest, float totalCost, string invoiceIDInput)
         {
             //request params need to request to MoMo system
             string endpoint = @"https://test-payment.momo.vn/gw_payment/transactionProcessor";
@@ -27,13 +27,16 @@ namespace HotelManagement.Controllers
             string serectkey = MomoConfig.SecretKey;
 
             string orderInfo = "orderInfo";
+            //string returnUrl = MomoConfig.ReturnUrl + "?icOfGuest=" + icOfGuest + "&nameOfGuest=" + nameOfGuest + "&addressOfGuest=" + addressOfGuest + "&genderOfGuest=" + genderOfGuest + "&CatOfGuest=" + CatOfGuest + "&totalCost=" + totalCost;
             string returnUrl = MomoConfig.ReturnUrl;
             string notifyUrl = MomoConfig.NotifyUrl;
 
-            string amount = "100000";
-            string orderid = Guid.NewGuid().ToString();
+            string myInvoiceID = Guid.NewGuid().ToString();
+
+            string amount = totalCost.ToString();
+            string orderid = myInvoiceID;
             string requestId = Guid.NewGuid().ToString();
-            string extraData = "";
+            string extraData = icOfGuest + nameOfGuest + addressOfGuest + genderOfGuest + CatOfGuest + totalCost; ;
 
             //Before sign HMAC SHA256 signature
             string rawHash = "partnerCode=" +
@@ -53,6 +56,7 @@ namespace HotelManagement.Controllers
             string signature = crypto.signSHA256(rawHash, serectkey);
 
             //build body json request
+          
             JObject message = new JObject
             {
                 { "partnerCode", partnerCode },
@@ -65,7 +69,8 @@ namespace HotelManagement.Controllers
                 { "notifyUrl", notifyUrl },
                 { "extraData", extraData },
                 { "requestType", "captureMoMoWallet" },
-                { "signature", signature }
+                { "signature", signature },
+                
 
             };
 
@@ -75,6 +80,9 @@ namespace HotelManagement.Controllers
 
             //System.Diagnostics.Process.Start(jmessage.GetValue("payUrl").ToString());
 
+            var controller = new ManagerController();
+            controller.InvoiceOfGuest(icOfGuest, nameOfGuest, addressOfGuest, genderOfGuest, CatOfGuest, totalCost, myInvoiceID);
+
             return Redirect(jmessage.GetValue("payUrl").ToString());
         }
 
@@ -83,6 +91,7 @@ namespace HotelManagement.Controllers
             string param = Request.QueryString.ToString().Substring(0, Request.QueryString.ToString().IndexOf("signature") - 1);
             param = Server.UrlDecode(param);
 
+            
             MoMoSecurity crypto = new MoMoSecurity();
 
             string secretKey = MomoConfig.SecretKey;
@@ -107,7 +116,6 @@ namespace HotelManagement.Controllers
             //Add Invoice
 
             //
-
             return View();
         }
 

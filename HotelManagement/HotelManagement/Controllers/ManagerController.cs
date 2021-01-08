@@ -29,16 +29,28 @@ namespace HotelManagement.Controllers
             return View();
         }
 
-        public ActionResult RoomRentalSlip(int page = 1, int pagesize = 5)
+        public ActionResult RoomRentalSlip(bool isPaid = false, int page = 1, int pagesize = 5)
         {
             //if (!CheckLoginForManager())
             //    return RedirectToAction("Login", "Account", new { roleID = RoleIds.Manager });
-
-            IEnumerable<RoomRentalSlip> listRoomRentalSlip = (from i in _context.RoomRentalSlips
-                                                              where i.InvoiceID == null
-                                                              orderby i.Id
-                                                              select i).ToPagedList(page, pagesize);
-            return View(listRoomRentalSlip);
+            if (isPaid == false)
+            {
+                ViewBag.Data = 1;
+                IEnumerable<RoomRentalSlip> listRoomRentalSlip = (from i in _context.RoomRentalSlips
+                                                                  where i.InvoiceID == null
+                                                                  orderby i.Id
+                                                                  select i).ToPagedList(page, pagesize);
+                return View(listRoomRentalSlip);
+            }
+            else
+            {
+                ViewBag.Data = 2;
+                IEnumerable<RoomRentalSlip> listRoomRentalSlip = (from i in _context.RoomRentalSlips
+                                                                  where i.InvoiceID != null
+                                                                  orderby i.Id
+                                                                  select i).ToPagedList(page, pagesize);
+                return View(listRoomRentalSlip);
+            }
         }
 
         [HttpGet]
@@ -97,8 +109,8 @@ namespace HotelManagement.Controllers
                                                               select i).ToPagedList(1, 5);
             return View(listRoomRentalSlip);
         }
-
-        public ActionResult InvoiceOfGuest(int icOfGuest, string nameOfGuest, string addressOfGuest, bool genderOfGuest, int CatOfGuest, float totalCost)
+        
+        public ActionResult InvoiceOfGuest(int icOfGuest, string nameOfGuest, string addressOfGuest, bool genderOfGuest, int CatOfGuest, float totalCost, string invoiceIDInput)
         {
             try
             {
@@ -115,7 +127,13 @@ namespace HotelManagement.Controllers
                     return Content("noRoom");
                 }
 
-                var invoiceID = new GenerateInvoiceID().RandomString(10);
+                string invoiceID;
+
+                if (invoiceIDInput == null)
+                    invoiceID = new GenerateInvoiceID().RandomString(10);
+                else
+                    invoiceID = invoiceIDInput;
+
                 List<Room> room = new List<Room>();
                 if (guestInDb == null)
                 {
@@ -185,6 +203,102 @@ namespace HotelManagement.Controllers
             catch
             {
                 return Content("false");
+            }
+        }
+
+        public void Test(int icOfGuest, string nameOfGuest, string addressOfGuest, bool genderOfGuest, int CatOfGuest, float totalCost, string invoiceIDInput)
+        {
+            try
+            {
+                var guestInDb = (from i in _context.Guests
+                                 where i.CMND == icOfGuest
+                                 select i).SingleOrDefault();
+
+                var roomRentalSlips = (from i in _context.RoomRentalSlips
+                                       where i.Status == true
+                                       select i).ToList();
+
+                if (roomRentalSlips.Count == 0)
+                {
+                    return;
+                }
+
+                string invoiceID;
+
+                if (invoiceIDInput == null)
+                    invoiceID = new GenerateInvoiceID().RandomString(10);
+                else
+                    invoiceID = invoiceIDInput;
+
+                List<Room> room = new List<Room>();
+                if (guestInDb == null)
+                {
+                    var guest = new Guest();
+                    guest.CMND = icOfGuest;
+                    guest.Name = nameOfGuest;
+                    guest.Sex = genderOfGuest;
+                    guest.Address = addressOfGuest;
+                    guest.GuestCategoryId = CatOfGuest;
+                    if (new InvoiceModel().AddGuest(guest))
+                    {
+                        if (new InvoiceModel().AddInvoice(invoiceID, guest.Id, totalCost))
+                        {
+
+                            foreach (var item in roomRentalSlips)
+                            {
+                                item.InvoiceID = invoiceID;
+                                item.Status = false;
+                                room = (from i in _context.Rooms
+                                        where i.Id == item.RoomId
+                                        select i).ToList();
+                                if (new InvoiceModel().UpdateRoomRentalSlip(item))
+                                {
+                                }
+                            }
+                            foreach (var item in room)
+                            {
+                                item.IsAvailable = true;
+                                if (new InvoiceModel().UpdateRoomStatus(item))
+                                {
+                                }
+                            }
+                        }
+                    }
+                    return;
+
+                }
+                else
+                {
+                    if (new InvoiceModel().UpdateGuest(guestInDb, nameOfGuest, genderOfGuest, addressOfGuest, CatOfGuest))
+                    {
+                        if (new InvoiceModel().AddInvoice(invoiceID, guestInDb.Id, totalCost))
+                        {
+                            foreach (var item in roomRentalSlips)
+                            {
+                                item.InvoiceID = invoiceID;
+                                item.Status = false;
+                                room = (from i in _context.Rooms
+                                        where i.Id == item.RoomId
+                                        select i).ToList();
+                                if (new InvoiceModel().UpdateRoomRentalSlip(item))
+                                {
+                                }
+                            }
+                            foreach (var item in room)
+                            {
+                                item.IsAvailable = true;
+                                if (new InvoiceModel().UpdateRoomStatus(item))
+                                {
+                                }
+                            }
+                        }
+                    }
+                    return;
+                }
+            }
+            catch
+            {
+                return ;
             }
         }
 
