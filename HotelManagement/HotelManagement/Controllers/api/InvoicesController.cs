@@ -97,6 +97,16 @@ namespace HotelManagement.Controllers.api
             return new InvoiceDto(invoice);
         }
 
+        [HttpGet]
+        public InvoiceFullInfoDto GetFullInfo(string id)
+        {
+            var invoice = this._context.Invoices.Find(id);
+
+            if(invoice == null)
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            return new InvoiceFullInfoDto(invoice);
+        }
         private bool isBetween(string dateStr, string startDateStr, string endDateStr)
         {
             var date = InvoiceDto.ConvertStringToDate(dateStr);

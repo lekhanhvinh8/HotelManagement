@@ -215,5 +215,10 @@ namespace HotelManagement.Controllers
 
             return true;
         }
+
+        public ActionResult Statistical()
+        {
+            return View();
+        }
     }
 }

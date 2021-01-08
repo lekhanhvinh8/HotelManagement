@@ -16,3 +16,23 @@
     border: 2px solid red;
 }
 
+.chart-container-revenue {
+    position: absolute;
+    top: 80px;
+    left: 0px;
+    height: 50vh;
+    width: 50vw;
+}
+
+.chart-container-density {
+    float: right;
+    position: relative;
+    top: 80px;
+    right: 0px;
+    height: 50vh;
+    width: 50vw;
+}
+
+.select-month {
+    text-align: center;
+}

@@ -58,6 +58,7 @@
                 </tbody>
             </table>
         </div>
+
     </div>
 
 
@@ -72,8 +73,6 @@
 
     <script>
         $(document).ready(function () {
-
-
             ReloadRoomCategorySelection();
             ReloadRoomSelection();
             $("#filter-invoice input[name='startDate']").datepicker({ dateFormat: "yy-mm-dd" });
@@ -82,9 +81,9 @@
             var dataTableInvoice = $("#table-invoices").DataTable({
                 ajax: {
                     url: "/api/Invoices/GetSome?startDate=" + $("#filter-invoice input[name='startDate']").val()
-                                                            + "&endDate=" + $("#filter-invoice input[name='endDate']").val()
-                                                            + "&roomCategoryID=" + $("#filter-invoice select[name='searchByRoomCategory'] option:selected").attr("value")
-                                                            + "&roomID=" + $("#filter-invoice select[name='searchByRoom'] option:selected").attr("value"),
+                        + "&endDate=" + $("#filter-invoice input[name='endDate']").val()
+                        + "&roomCategoryID=" + $("#filter-invoice select[name='searchByRoomCategory'] option:selected").attr("value")
+                        + "&roomID=" + $("#filter-invoice select[name='searchByRoom'] option:selected").attr("value"),
                     dataSrc: "",
                 },
                 columns: [
@@ -120,14 +119,14 @@
                         title: "Detail",
                         data: "id",
                         render: function (data) {
-                            return "<button class='btn-link' data=" + data + ">Detail</button>";
+                            return "<button class='btn-link js-detail' data=" + data + ">Detail</button>";
                         },
                     },
                     {
                         title: "Delete",
                         data: "id",
                         render: function (data) {
-                            return "<button class='btn btn-danger' data=" + data + "><i class='fa fa-minus'></i></button>";
+                            return "<button class='btn btn-danger js-delete' data=" + data + "><i class='fa fa-minus'></i></button>";
                         },
                     },
                 ],
@@ -156,6 +155,30 @@
                 dataTableInvoice.ajax.url(url).load();
             });
 
+            $("#table-invoices tbody").on("click", ".js-detail", function () {
+                var button = $(this);
+
+                bootbox.dialog({
+                    title: "Invoice ID: " + button.attr("data"),
+                    message: DialogInvoiceMarkup(button.attr("data")),
+                    buttons: [
+                        {
+                            label: "OK",
+                            className: "btn btn-success",
+                            callback: function () {
+
+                            },
+                        }
+                    ],
+                });
+
+            });
+
+            $("#table-invoices tbody").on("click", ".js-delete", function () {
+                var button = $(this);
+
+                alert("delete " + button.attr("data"));
+            });
 
             function ReloadRoomCategorySelection() {
                 var selector = $("#filter-invoice select[name='searchByRoomCategory']");
@@ -189,6 +212,102 @@
                         }
                     },
                 });
+            }
+
+            function DialogInvoiceMarkup(invoiceID) {
+                var markup = "<div id='dialog-invoice'>";
+
+                $.ajax({
+                    url: "/api/Invoices/GetFullInfo?id=" + invoiceID,
+                    method: "get",
+                    async: false,
+                    success: function (response) {
+                        var rentals = response.roomRentalSlipFullInfoDtos;
+                        for (var i = 0; i < rentals.length; i++) {
+                            markup += "<div class='well'>";
+
+                            markup += "<div class='form-inline'>";
+                            markup += "<label class='control-label' style='margin-right:50px;'>Room Rental Slip: " + rentals[i].id + "</label>";
+                            markup += "<label class='control-label'>" + rentals[i].roomNumber + ":  " + rentals[i].roomCategory + "<label>";
+                            markup += "</div >";
+
+                            markup += "<div class='form-inline'>";
+                            markup += "<label class='control-label' style='margin-right:44px;'>Check In: " + rentals[i].startDate + "</label>";
+                            markup += "<label class='control-label'>Check out: " + rentals[i].endDate + "</label>";
+                            markup += "</div>";
+
+                            markup += "<br/>";
+
+                            markup += "<table class='table table-bordered'>";
+                            markup += "<thead><tr>";
+                            markup += "<td>CMND</td><td>Name</td><td>Sex</td><td>Address</td><td>Guest Category</td>";
+                            markup += "</tr></thead>";
+                            markup += "<tbody>";
+
+                            var guests = rentals[i].guests;
+                            for (var j = 0; j < guests.length; j++) {
+                                markup += "<tr>";
+
+                                markup += "<td>" + guests[j].cmnd + "</td>";
+                                markup += "<td>" + guests[j].name + "</td>";
+
+                                if (guests[j].sex == false)
+                                    markup += "<td>Male</td>";
+                                else
+                                    markup += "<td>Female</td>";
+
+                                markup += "<td>" + guests[j].address + "</td>";
+                                markup += "<td>" + guests[j].guestCategoryName + "</td>";
+
+                                markup += "</tr>";
+                            }
+
+                            markup += "</tbody>";
+                            markup += "</table>"
+
+                            markup += "<div>";
+                            markup += "<label class='control-label'>Unit Price: " + rentals[i].unitPrice + "</label>";
+                            markup += "</div>";
+
+                            markup += "<div>";
+                            markup += "<label class='control-label'>Highest Coefficient: " + rentals[i].highestGuestCoefficient + "   at " + rentals[i].highestGuestCoefficientName + "</label>";
+                            markup += "</div>";
+
+                            markup += "<div>";
+                            markup += "<label class='control-label'>Surcharge at: " + rentals[i].numStartSurcharge + "rd Guest     With Surcharge Rate: " + rentals[i].surchargeRate + "</label>";
+                            markup += "</div>";
+
+                            if (guests.length < rentals[i].numStartSurcharge) {
+                                markup += "<div>";
+                                markup += "<label class='control-label'>Total Cost: " + rentals[i].unitPrice + " x " + rentals[i].highestGuestCoefficient + " x " + rentals[i].days + " = " + rentals[i].totalCost + "</label>";
+                                markup += "</div>";
+                            }
+                            else {
+                                markup += "<div>";
+                                markup += "<label class='control-label'>Total Cost: " + rentals[i].unitPrice + " x " + rentals[i].highestGuestCoefficient + " x " + rentals[i].days + " + " + rentals[i].unitPrice + " x " + rentals[i].surchargeRate + " = " + rentals[i].totalCost + "</label>";
+                                markup += "</div>";
+                            }
+
+                            markup += "</div>"; //end of <div class='well'>
+                        }
+
+                        markup += "<div>";
+                        markup += "<label class='control-label'>Date of payment: " + response.dateOfInvoice + "</label>";
+                        markup += "</div>";
+
+                        markup += "<div>";
+                        markup += "<label class='control-label'>Payer: " + response.guestName + " CMND: " + response.guestCMND + "</label>";
+                        markup += "</div>";
+
+                        markup += "<div>";
+                        markup += "<label class='control-label label-danger'>Total Cost: " + response.totalCost + "</label>";
+                        markup += "</div>";
+                    }
+                });
+
+                markup += "</div>"
+
+                return markup;
             }
         });
     </script>

@@ -52,6 +52,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=2.0.12.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.12\lib\net45\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
       <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
@@ -155,7 +158,9 @@
     <Compile Include="Controllers\api\RoomCategoriesController.cs" />
     <Compile Include="Controllers\api\RoomRentalSlipsController.cs" />
     <Compile Include="Controllers\api\RoomsController.cs" />
+    <Compile Include="Controllers\api\StatisticController.cs" />
     <Compile Include="Controllers\ManagerController.cs" />
+    <Compile Include="Controllers\MomoPaymentController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -177,13 +182,19 @@
     <Compile Include="Models\Dtos\GuestCategoryDto.cs" />
     <Compile Include="Models\Dtos\GuestDto.cs" />
     <Compile Include="Models\Dtos\InvoiceDto.cs" />
+    <Compile Include="Models\Dtos\InvoiceFullInfoDto.cs" />
     <Compile Include="Models\Dtos\RoomCategoryDto.cs" />
+    <Compile Include="Models\Dtos\RoomCategoryForStatistics.cs" />
     <Compile Include="Models\Dtos\RoomDto.cs" />
+    <Compile Include="Models\Dtos\RoomForStatistics.cs" />
     <Compile Include="Models\Dtos\RoomRentalSlipDto.cs" />
+    <Compile Include="Models\Dtos\RoomRentalSlipFullInfoDto.cs" />
     <Compile Include="Models\Guest.cs" />
     <Compile Include="Models\GuestCategory.cs" />
     <Compile Include="Models\HotelManagementDbContext.cs" />
     <Compile Include="Models\Invoice.cs" />
+    <Compile Include="Models\MoMoSecurity.cs" />
+    <Compile Include="Models\PaymentRequest.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\Room.cs" />
     <Compile Include="Models\RoomCategory.cs" />
@@ -375,6 +386,7 @@
     <Content Include="Content\DataTables\css\common.scss" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\chart-area-demo.js" />
+    <Content Include="Scripts\Chart.js" />
     <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\copy_csv_xls_pdf.swf" />
     <Content Include="Scripts\dataTables.bootstrap.js" />
@@ -467,6 +479,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
     <Content Include="Scripts\TableTools.js" />
     <Content Include="Scripts\TableTools_orig.js" />
     <Content Include="Scripts\ZeroClipboard.js" />
@@ -487,10 +500,12 @@
     <Content Include="Views\Manager\RoomRentalSlip.cshtml" />
     <Content Include="Views\Manager\InvoiceManagement.cshtml" />
     <Content Include="Views\Manager\CreateInvoice.cshtml" />
+    <Content Include="Views\Manager\Statistical.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\MomoPayment\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
