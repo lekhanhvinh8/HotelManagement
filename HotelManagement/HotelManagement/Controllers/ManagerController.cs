@@ -29,16 +29,28 @@ namespace HotelManagement.Controllers
             return View();
         }
 
-        public ActionResult RoomRentalSlip(int page = 1, int pagesize = 5)
+        public ActionResult RoomRentalSlip(bool isPaid = false, int page = 1, int pagesize = 5)
         {
             //if (!CheckLoginForManager())
             //    return RedirectToAction("Login", "Account", new { roleID = RoleIds.Manager });
-
-            IEnumerable<RoomRentalSlip> listRoomRentalSlip = (from i in _context.RoomRentalSlips
-                                                              where i.InvoiceID == null
-                                                              orderby i.Id
-                                                              select i).ToPagedList(page, pagesize);
-            return View(listRoomRentalSlip);
+            if (isPaid == false)
+            {
+                ViewBag.Data = 1;
+                IEnumerable<RoomRentalSlip> listRoomRentalSlip = (from i in _context.RoomRentalSlips
+                                                                  where i.InvoiceID == null
+                                                                  orderby i.Id
+                                                                  select i).ToPagedList(page, pagesize);
+                return View(listRoomRentalSlip);
+            }
+            else
+            {
+                ViewBag.Data = 2;
+                IEnumerable<RoomRentalSlip> listRoomRentalSlip = (from i in _context.RoomRentalSlips
+                                                                  where i.InvoiceID != null
+                                                                  orderby i.Id
+                                                                  select i).ToPagedList(page, pagesize);
+                return View(listRoomRentalSlip);
+            }
         }
 
         [HttpGet]

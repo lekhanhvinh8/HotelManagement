@@ -4,15 +4,14 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
 <div>
-	<div>
+	<div style="margin: 30px -55px;">
 		<ul class="list-category" style="margin-left: 56px;">
 			<li class="category-li">
-				<a class="category" href=""><span>Room Rental Slip</span></a>
+				<a class="category" href="@Url.Action("RoomRentalSlip", "Manager", new { isPaid = false })"><span>Room Rental Slip</span></a>
 			</li>
 			<li class="category-li">
-				<a class="category" href=""><span>Paid Room Rental Slip </span></a>
+				<a class="category" href="@Url.Action("RoomRentalSlip", "Manager", new { isPaid = true })"><span>Paid Room Rental Slip </span></a>
 			</li>
 		</ul>
 	</div>
@@ -48,9 +47,14 @@
 	<div style="border-top: 1px groove;">
 		@Html.PagedListPager(Model, Page => Url.Action("RoomRentalSlip", new { Page }))
 	</div>
-	<div style="float:right; margin: 2rem 0 2rem; padding-top:1rem;	">
-		<button class="btn btn-primary" data-toggle="modal" data-target="#searchRoom">Create invoice </button>
-	</div>
+	@{
+		if (ViewBag.Data == 1)
+		{
+			<div style="float:right; margin: 2rem 0 2rem; padding-top:1rem;	">
+				<button class="btn btn-primary" data-toggle="modal" data-target="#searchRoom">Create invoice </button>
+			</div>
+		}
+	}
 </div>
 
 
@@ -134,6 +138,7 @@
 
 <script>
 	$(document).ready(function () {
+		$('.category-li:nth-child(@ViewBag.Data)').addClass("targets");
 		$('#search').click(function (e) {
 			e.preventDefault();
 			var roomNum = $('#roomNumber').val();
