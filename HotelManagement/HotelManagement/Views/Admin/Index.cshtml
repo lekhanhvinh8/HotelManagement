@@ -15,6 +15,45 @@
     <link rel="stylesheet" type="text/css" href="~/Content/Admin.css"/>
 </head>
 <body>
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#" style="color:white; font-size:40px">Hotel</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="/Admin/Index">Admin</a></li>
+                    <li><a href="/Admin/RevenueAreaChart">Thống Kê</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Quản Lý <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/Manager/MakeRoomRental">Make Room Rental</a></li>
+                            <li><a href="/Manager/RoomRentalSlip">Room Rental</a></li>
+                            <li><a href="/Manager/InvoiceManagement">Invoice Management</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="https://png.pngtree.com/element_our/20190530/ourlarge/pngtree-520-couple-avatar-boy-avatar-little-dinosaur-cartoon-cute-image_1263411.jpg" alt="Avatar" class="avatar" style=" vertical-align: middle; width: 20px; height: 20px; border-radius: 50%;"> Account Name <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Profile</a></li>
+                            <li><a href="#">Change Password</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Log Out</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <div class="container">
         <div id="smart-tab">
             <ul class="nav">
@@ -46,7 +85,6 @@
 
                             </thead>
                             <tbody>
-
                             </tbody>
                         </table>
                     </div>
@@ -84,7 +122,6 @@
                         <div class="form-group" style="width:30%;">
                             <label for="room-category-id">Room Category</label>
                             <select id="room-room-category-id" class="form-control" name="roomCategoryId">
-                                
                             </select>
                         </div>
                     </div>
@@ -415,7 +452,7 @@
                 dataTableRoom.ajax.url('/api/Rooms/GetSome?roomCategoryId=' + $("#room-room-category-id option:selected").attr("data")).load();
                 //dataTableRoom.ajax.reload();
             });
-            
+
             $("#add-new-room").on("click", function () {
 
                 $("#room-id").attr("value", "");
@@ -456,7 +493,7 @@
 
             //Guest categories management
             $("#add-new-guest-category").on("click", function () {
-                
+
                 $("#guest-category-id").attr("value", "");
                 $("#guest-category-name").attr("value", "");
                 $("#guest-category-coefficient").attr("value", "");
@@ -605,8 +642,7 @@
                                     });
                                 }
 
-                                if(mode == "modify")
-                                {
+                                if (mode == "modify") {
                                     form.validate({
                                         rules: {
                                             name: {
@@ -705,7 +741,7 @@
                                             },
                                         },
                                         messages: {
-                                            
+
                                         },
                                     });
 
