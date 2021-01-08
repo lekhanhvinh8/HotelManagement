@@ -7,7 +7,11 @@ namespace HotelManagement.Models
     {
         public Invoice()
         {
+            var ticks = DateTime.Now.Ticks;
+            var guid = Guid.NewGuid().ToString();
 
+            this.ID = ticks.ToString() + guid;
+            this.RoomRentalSlips = new List<RoomRentalSlip>();
         }
         public Invoice(List<RoomRentalSlip> roomRentalSlips)
         {

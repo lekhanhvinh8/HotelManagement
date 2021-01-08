@@ -1,4 +1,5 @@
 ﻿using HotelManagement.Models;
+using HotelManagement.Models.Consts;
 using HotelManagement.Models.Dtos;
 using Newtonsoft.Json.Linq;
 using System;
@@ -26,8 +27,8 @@ namespace HotelManagement.Controllers
             string serectkey = MomoConfig.SecretKey;
 
             string orderInfo = "orderInfo";
-            string returnUrl = @"https://localhost:44333/Manager/RoomRentalSlip";
-            string notifyurl = @"https://localhost:44333/Manager/RoomRentalSlip";
+            string returnUrl = MomoConfig.ReturnUrl;
+            string notifyUrl = MomoConfig.NotifyUrl;
 
             string amount = "100000";
             string orderid = Guid.NewGuid().ToString();
@@ -43,7 +44,7 @@ namespace HotelManagement.Controllers
                 orderid + "&orderInfo=" +
                 orderInfo + "&returnUrl=" +
                 returnUrl + "&notifyUrl=" +
-                notifyurl + "&extraData=" +
+                notifyUrl + "&extraData=" +
                 extraData;
 
 
@@ -61,7 +62,7 @@ namespace HotelManagement.Controllers
                 { "orderId", orderid },
                 { "orderInfo", orderInfo },
                 { "returnUrl", returnUrl },
-                { "notifyUrl", notifyurl },
+                { "notifyUrl", notifyUrl },
                 { "extraData", extraData },
                 { "requestType", "captureMoMoWallet" },
                 { "signature", signature }
@@ -103,8 +104,50 @@ namespace HotelManagement.Controllers
                 ViewBag.message = "Payment Success";
             }
 
+            //Add Invoice
+
+            //
+
             return View();
         }
 
+        public JsonResult NotifyUrl()
+        {
+            string param = "partner_code=" + Request["partner_code"] +
+                           "&access_keys=" + Request["access_keys"] +
+                           "&amount=" + Request["amount"] +
+                           "&order_id=" + Request["order_id"] +
+                           "&order_info=" + Request["order_info"] +
+                           "&order_type=" + Request["order_type"] +
+                           "&transaction_id=" + Request["transaction_id"] +
+                           "&message=" + Request["message"] +
+                           "&response_time=" + Request["response_time"] +
+                           "&status_code=" + Request["status_code"];
+
+            param = Server.UrlDecode(param);
+            MoMoSecurity scryto = new MoMoSecurity();
+            string secretKey = MomoConfig.SecretKey;
+            string signature = scryto.signSHA256(param, secretKey);
+            string statusCode = Request["status_code"].ToString();
+
+            /*
+            if (signature != Request["Signature"].ToString())
+            {
+                ViewBag.message = "Invalid Information";
+                return ;
+            }
+            */
+
+            if (statusCode != "0")
+            {
+                //Failed
+            }
+            else
+            {
+                //Success
+            }
+
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
     }
 }

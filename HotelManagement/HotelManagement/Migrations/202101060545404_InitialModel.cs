@@ -130,8 +130,8 @@
             Sql("Insert Into Roles(RoleName) values('Admin')");
             Sql("Insert Into Roles(RoleName) values('Manager')");
 
-            Sql("Insert Into Accounts(UserName, PasswordHash, RoleID) Values('admin', 'gFuYE2Bpl7A=', 1)");
-            Sql("Insert Into Accounts(UserName, PasswordHash, RoleID) Values('manager', 'gFuYE2Bpl7A=', 2)");
+            Sql("Insert Into Accounts(UserName, PasswordHash, RoleID) Values('admin', '0Nm+EkIrk0g=', 1)");
+            Sql("Insert Into Accounts(UserName, PasswordHash, RoleID) Values('manager', '0Nm+EkIrk0g=', 2)");
 
             Sql("Insert Into RoomCategories(Name, UnitPrice, MaxNumberOfGuests, NumStartSurcharge, SurchargeRate) Values('Test', 1, 1, 1, 1)");
         }

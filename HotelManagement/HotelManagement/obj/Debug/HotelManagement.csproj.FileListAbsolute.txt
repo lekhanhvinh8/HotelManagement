@@ -281,3 +281,5 @@ D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManag
 D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\obj\Debug\HotelManagement.pdb
 C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\bin\log4net.dll
 C:\MyData\OnGoingProject\HotelManagement\HotelManagement\HotelManagement\bin\log4net.xml
+D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\bin\log4net.dll
+D:\HK1_2020-2021\Software Engineering\Đồ án\Hotel\HotelManagement\HotelManagement\bin\log4net.xml
