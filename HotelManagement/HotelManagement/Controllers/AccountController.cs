@@ -60,15 +60,22 @@ namespace HotelManagement.Controllers
 
             return View(loginViewModel);
         }
-        public ActionResult Logout(string sessionName)
+        public ActionResult Logout()
         {
-            if (Session[sessionName] == null)
-                throw new System.Web.Http.HttpResponseException(HttpStatusCode.NotFound);
-
-            Session[sessionName] = null;
+            Session.Abandon();
+            Session.RemoveAll();
 
             return RedirectToAction("Login", "Account");
         }
+        //public ActionResult Logout(string sessionName)
+        //{
+        //    if (Session[sessionName] == null)
+        //        throw new System.Web.Http.HttpResponseException(HttpStatusCode.NotFound);
+
+        //    Session[sessionName] = null;
+
+        //    return RedirectToAction("Login", "Account");
+        //}
         private int Login(string username, string password)
         {
             string pwd = Syptop.Encrypt(password, true);
