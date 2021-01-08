@@ -77,5 +77,19 @@ namespace HotelManagement.Models.ViewModels
                 return false;
             }
         }
+
+        public bool UpdateRoomStatus(Room room)
+        {
+            try
+            {
+                _context.Rooms.AddOrUpdate(room);
+                _context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

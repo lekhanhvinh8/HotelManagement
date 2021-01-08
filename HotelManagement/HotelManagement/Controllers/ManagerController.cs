@@ -1,4 +1,5 @@
 ﻿using HotelManagement.Models;
+using HotelManagement.Models.Consts;
 using HotelManagement.Models.ViewModels;
 using PagedList;
 using System;
@@ -22,11 +23,17 @@ namespace HotelManagement.Controllers
 
         public ActionResult MakeRoomRental()
         {
+            //if (!CheckLoginForManager())
+            //    return RedirectToAction("Login", "Account", new { roleID = RoleIds.Manager });
+
             return View();
         }
 
         public ActionResult RoomRentalSlip(int page = 1, int pagesize = 5)
         {
+            //if (!CheckLoginForManager())
+            //    return RedirectToAction("Login", "Account", new { roleID = RoleIds.Manager });
+
             IEnumerable<RoomRentalSlip> listRoomRentalSlip = (from i in _context.RoomRentalSlips
                                                               where i.InvoiceID == null
                                                               orderby i.Id
@@ -55,6 +62,7 @@ namespace HotelManagement.Controllers
 
         public ActionResult RawInvoice()
         {
+
             IEnumerable<RoomRentalSlip> listRoomRentalSlip = (from i in _context.RoomRentalSlips
                                                               where i.Status == true
                                                               orderby i.Id
@@ -65,6 +73,9 @@ namespace HotelManagement.Controllers
 
         public ActionResult CreateInvoice(int room)
         {
+            //if (!CheckLoginForManager())
+            //    return RedirectToAction("Login", "Account", new { roleID = RoleIds.Manager });
+
             var roomRental = (from i in _context.RoomRentalSlips
                               where i.RoomId == room
                               where i.Status == false
@@ -95,10 +106,20 @@ namespace HotelManagement.Controllers
                                  where i.CMND == icOfGuest
                                  select i).SingleOrDefault();
 
+                var roomRentalSlips = (from i in _context.RoomRentalSlips
+                                       where i.Status == true
+                                       select i).ToList();
+
+                if (roomRentalSlips.Count == 0)
+                {
+                    return Content("noRoom");
+                }
+
                 var invoiceID = new GenerateInvoiceID().RandomString(10);
+                List<Room> room = new List<Room>();
                 if (guestInDb == null)
                 {
-                    var guest = new Guest();
+                    var guest = new Guest();                   
                     guest.CMND = icOfGuest;
                     guest.Name = nameOfGuest;
                     guest.Sex = genderOfGuest;
@@ -108,17 +129,25 @@ namespace HotelManagement.Controllers
                     {                        
                         if (new InvoiceModel().AddInvoice(invoiceID, guest.Id, totalCost))
                         {
-                            var roomRentalSlips = (from i in _context.RoomRentalSlips
-                                                   where i.Status == true
-                                                   select i).ToList();
+                            
                             foreach (var item in roomRentalSlips)
                             {
                                 item.InvoiceID = invoiceID;
                                 item.Status = false;
+                                room = (from i in _context.Rooms
+                                            where i.Id == item.RoomId
+                                            select i).ToList();
                                 if (new InvoiceModel().UpdateRoomRentalSlip(item))
                                 {
                                 }
-                            }                                                 
+                            }
+                            foreach (var item in room)
+                            {
+                                item.IsAvailable = true;
+                                if(new InvoiceModel().UpdateRoomStatus(item))
+                                {
+                                }    
+                            }                           
                         }
                     }
                     return Content("/Manager/InvoiceManagement");
@@ -130,17 +159,24 @@ namespace HotelManagement.Controllers
                     {
                         if (new InvoiceModel().AddInvoice(invoiceID ,guestInDb.Id, totalCost))
                         {
-                            var roomRentalSlips = (from i in _context.RoomRentalSlips
-                                                   where i.Status == true
-                                                   select i).ToList();
                             foreach (var item in roomRentalSlips)
                             {
                                 item.InvoiceID = invoiceID;
                                 item.Status = false;
+                                room = (from i in _context.Rooms
+                                        where i.Id == item.RoomId
+                                        select i).ToList();
                                 if (new InvoiceModel().UpdateRoomRentalSlip(item))
                                 {
                                 }
-                            }                            
+                            }
+                            foreach (var item in room)
+                            {
+                                item.IsAvailable = true;
+                                if (new InvoiceModel().UpdateRoomStatus(item))
+                                {
+                                }
+                            }
                         }
                     }
                     return Content("/Manager/InvoiceManagement");
@@ -170,6 +206,14 @@ namespace HotelManagement.Controllers
         public ActionResult InvoiceManagement()
         {
             return View();
+        }
+
+        private bool CheckLoginForManager()
+        {
+            if (Session[SessionNames.ManagerID] == null)
+                return false;
+
+            return true;
         }
     }
 }
