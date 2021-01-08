@@ -117,7 +117,7 @@ namespace HotelManagement.Controllers
             {
                 var guestInDb = (from i in _context.Guests
                                  where i.CMND == icOfGuest
-                                 select i).SingleOrDefault();
+                                 select i).FirstOrDefault();
 
                 var roomRentalSlips = (from i in _context.RoomRentalSlips
                                        where i.Status == true
