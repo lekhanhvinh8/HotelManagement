@@ -9,6 +9,7 @@ using System.Web.Http;
 
 namespace HotelManagement.Controllers.api
 {
+    [System.Runtime.InteropServices.Guid("B57D4C5A-2587-49E1-876C-759CEBBFB573")]
     public class StatisticController : ApiController
     {
         private HotelManagementDbContext _context;

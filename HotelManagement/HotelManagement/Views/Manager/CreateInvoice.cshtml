@@ -29,42 +29,22 @@
 					var coefficient = 1.0;
 					var rentalDate = (item.EndDate - item.StartDate).TotalDays.ToString();
 					var surcharge = 0.0;
-					var hasForeign = false;
 
 					foreach (var i in item.Guests)
 					{
 						if (i.GuestCategory.Coefficient > 1.0)
 						{
-							hasForeign = true;
-							coefficient = i.GuestCategory.Coefficient - 1.0;
+							coefficient = i.GuestCategory.Coefficient;
 						}
 					}
 					if (item.Guests.Count >= item.Room.RoomCategory.NumStartSurcharge)
 					{
-						var sur = item.Room.RoomCategory.SurchargeRate;
-						if (hasForeign == true)
-						{
-							surcharge = (item.Room.RoomCategory.UnitPrice * sur) + (item.Room.RoomCategory.UnitPrice * coefficient);
-						}
-						else
-						{
-							surcharge = (item.Room.RoomCategory.UnitPrice * sur);
-						}
+						surcharge = item.Room.RoomCategory.SurchargeRate;
 					}
-					else
-					{
-						if (hasForeign == false)
-						{
-							surcharge = 0;
-						}
-						else
-						{
-							surcharge = item.Room.RoomCategory.UnitPrice * coefficient;
-						}
-					}
+
 					int ren;
 					ren = Int32.Parse(rentalDate);
-					var lineTotal = (item.Room.RoomCategory.UnitPrice + surcharge) * ren;
+					var lineTotal = (item.Room.RoomCategory.UnitPrice) * ren * coefficient  + surcharge * ren * item.Room.RoomCategory.UnitPrice;
 					totalCost += lineTotal;
 					<tr>
 						<td>@item.Room.RoomNumber</td>
